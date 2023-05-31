@@ -48,8 +48,22 @@ local paddedEnd = estring.padEnd("hello", "*", 10)
 print(paddedEnd)  --> Output: hello*****
 
 -- Example usage of the 'formatNum' function
-local formattedNum = estring.formatNum("1234567")
-print(formattedNum)  --> Output: 1,234,567
+local formattedNum1 = estring.formatNum(1234567890)
+print(formattedNum1)  -- Output: 1,234,567,890
+
+local formattedNum2 = estring.formatNum("9876543210")
+print(formattedNum2)  -- Output: 9,876,543,210
+
+-- Example usage of the 'formatTime' function
+local timeStr1 = estring.formatTime(3661)
+print(timeStr1)  -- Output: 01:01:01
+
+local timeStr2 = estring.formatTime("12345")
+print(timeStr2)  -- Output: 03:25:45
+
+local timeStr3 = estring.formatTime(59)
+print(timeStr3)  -- Output: 00:59
+
 ```
 
 ## Background
@@ -86,4 +100,14 @@ Then after it didn't understand how to return to Lua:
 
 ```
 instead of returning a result in every function, use lua_pushlstring
+```
+
+Some add-ons
+
+```
+adjust the estring_formatNum function so that it can accept either a number or a string from lua.
+```
+
+```
+Add a function that receives a single variable from lua which is either a string or a number, representing a number of seconds, and formats it as hours:minutes:seconds. If hours are zero, remove them. Return the string to lua
 ```

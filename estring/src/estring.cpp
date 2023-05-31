@@ -181,7 +181,15 @@ static int estring_padEnd(lua_State* L) {
 }
 
 static int estring_formatNum(lua_State* L) {
-    const char* str = luaL_checkstring(L, 1);
+    const char* str = nullptr;
+    if (lua_isnumber(L, 1)) {
+        double number = lua_tonumber(L, 1);
+        char buffer[64];
+        snprintf(buffer, sizeof(buffer), "%f", number);
+        str = buffer;
+    } else {
+        str = luaL_checkstring(L, 1);
+    }
     size_t strLength = strlen(str);
     size_t commaCount = (strLength - 1) / 3;
     size_t resultLength = strLength + commaCount;
@@ -200,7 +208,35 @@ static int estring_formatNum(lua_State* L) {
     return 1;
 }
 
+static int estring_formatTime(lua_State* L) {
+    int seconds;
+
+    if (lua_type(L, 1) == LUA_TNUMBER) {
+        seconds = (int)lua_tonumber(L, 1);
+    } else if (lua_type(L, 1) == LUA_TSTRING) {
+        const char* str = lua_tostring(L, 1);
+        seconds = atoi(str);
+    } else {
+        return luaL_error(L, "Invalid argument. Expected number or string.");
+    }
+
+    int hours = seconds / 3600;
+    int minutes = (seconds % 3600) / 60;
+    seconds = seconds % 60;
+
+    char result[64];
+    if (hours > 0) {
+        snprintf(result, sizeof(result), "%02d:%02d:%02d", hours, minutes, seconds);
+    } else {
+        snprintf(result, sizeof(result), "%02d:%02d", minutes, seconds);
+    }
+
+    lua_pushstring(L, result);
+    return 1;
+}
+
 static const luaL_Reg estring_functions[] = {
+    { "formatTime", estring_formatTime },
     { "concat", estring_concat },
     { "replace", estring_replace },
     { "trim", estring_trim },
