@@ -79,7 +79,7 @@ it should have a function called formatNum that a string from lua, adds a comma 
 Then when it used std::string anyway:
 
 ```
-it must always use const char* instead of const char*
+it must always use const char* instead of std::string
 ```
 
 Then after it didn't understand how to return to Lua:
