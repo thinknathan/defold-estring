@@ -220,7 +220,7 @@ static void LuaInit(lua_State* L) {
 
 static dmExtension::Result InitializeMyExtension(dmExtension::Params* params) {
     LuaInit(params->m_L);
-		dmLogInfo("Registered %s Extension\n", "estring");
+	dmLogInfo("Registered %s Extension\n", "estring");
     return dmExtension::RESULT_OK;
 }
 
