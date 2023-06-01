@@ -37,8 +37,11 @@ end
 
 -- Example usage of the 'join' function
 local arr = { "Hello", "world", "Lua" }
-local joined = estring.join(arr)
+local joined = estring.join(arr, "")
 print(joined)  --> Output: HelloworldLua
+
+local joined2 = estring.join(arr, ", ")
+print(joined2)  --> Output: Hello, world, Lua
 
 -- Example usage of the 'pad_start' function
 local paddedStart = estring.pad_start("hello", "*", 10)

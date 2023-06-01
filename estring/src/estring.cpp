@@ -99,6 +99,8 @@ static int estring_split(lua_State* L) {
 
 static int estring_join(lua_State* L) {
     luaL_checktype(L, 1, LUA_TTABLE);
+    const char* delimiter = luaL_checkstring(L, 2); // Get the delimiter string from Lua
+
     lua_pushnil(L);
     size_t totalLength = 0;
     while (lua_next(L, 1) != 0) {
@@ -109,18 +111,31 @@ static int estring_join(lua_State* L) {
         }
         lua_pop(L, 1);
     }
+
+    // Add the length of the delimiter for each string in the table
+    size_t delimiterLength = strlen(delimiter);
+    totalLength += (delimiterLength * (lua_objlen(L, 1) - 1));
+
     char* result = new char[totalLength + 1];
     char* current = result;
+
     lua_pushnil(L);
+    bool firstString = true; // Flag to skip adding delimiter before the first string
     while (lua_next(L, 1) != 0) {
         if (lua_type(L, -1) == LUA_TSTRING) {
             size_t segmentLength;
             const char* segment = lua_tolstring(L, -1, &segmentLength);
+            if (!firstString) {
+                strncpy(current, delimiter, delimiterLength);
+                current += delimiterLength;
+            }
             strncpy(current, segment, segmentLength);
             current += segmentLength;
+            firstString = false;
         }
         lua_pop(L, 1);
     }
+
     *current = '\0';
     lua_pushlstring(L, result, totalLength);
     delete[] result;
