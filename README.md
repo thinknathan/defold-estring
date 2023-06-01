@@ -2,12 +2,13 @@
 
 Defold extension implementing a variety of string-related utilities.
 
-You may prefer [defstring](https://github.com/subsoap/defstring) for a more robust implementation.
+You may prefer [DefString](https://github.com/subsoap/defstring) for a more robust implementation.
 
 ## Installation
 
 - Edit game.project
-- Add dependency `https://github.com/thinknathan/defold-estring/archive/main.zip`
+- Add dependency `https://github.com/thinknathan/defold-estring/archive/main.zip` for the current version
+- Or add a specific [release](https://github.com/thinknathan/defold-estring/releases)
 
 ## Usage
 
