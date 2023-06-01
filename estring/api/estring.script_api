@@ -1,0 +1,103 @@
+- name: estring
+  type: table
+  desc: Functions for interacting with the eString native extension
+  members:
+  - name: concat
+    type: function
+    desc: Joins two strings
+    returns:
+    parameters:
+    - name: first
+      type: string
+    - name: second
+      type: string
+    - name: output
+      type: string
+  - name: replace
+    type: function
+    desc: Replace each occurance of search in subject with replace value
+    returns:
+    parameters:
+    - name: subject
+      type: string
+    - name: search
+      type: string
+    - name: replace
+      type: string
+    - name: output
+      type: string
+  - name: trim
+    type: function
+    desc: Trim whitespace from input
+    returns:
+    parameters:
+    - name: input
+      type: string
+    - name: output
+      type: string
+  - name: split
+    type: function
+    desc: Create a table with values from input, split by delimiter
+    returns:
+    parameters:
+    - name: input
+      type: string
+    - name: delimiter
+      type: string
+    - name: output
+      type: table
+  - name: join
+    type: function
+    desc: Joins values in a table into one string, with a separator added between
+    returns:
+    parameters:
+    - name: table
+      type: table
+    - name: separator
+      type: string
+    - name: output
+      type: string
+  - name: pad_start
+    type: function
+    desc: Adds padding to start of input string until it reaches specified length
+    returns:
+    parameters:
+    - name: input
+      type: string
+    - name: padding
+      type: string
+    - name: length
+      type: number
+    - name: output
+      type: string
+  - name: pad_end
+    type: function
+    desc: Adds padding to end of input string until it reaches specified length
+    returns:
+    parameters:
+    - name: input
+      type: string
+    - name: padding
+      type: string
+    - name: length
+      type: number
+    - name: output
+      type: string
+  - name: format_number
+    type: function
+    desc: Adds comma every 3 digits as a thousands separator
+    returns:
+    parameters:
+    - name: input
+      type: string|number
+    - name: output
+      type: string
+  - name: format_time
+    type: function
+    desc: Separates number of seconds into hours, minutes, and seconds with a colon in-between. Skips hours digits if they are zero.
+    returns:
+    parameters:
+    - name: seconds
+      type: string|number
+    - name: output
+      type: string

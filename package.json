@@ -1,0 +1,5 @@
+{
+    "name": "defold-estring",
+    "version": "1.0.0",
+    "types": "./@types/defold-estring.d.ts"
+}
