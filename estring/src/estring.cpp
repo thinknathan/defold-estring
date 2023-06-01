@@ -180,46 +180,6 @@ static int estring_padEnd(lua_State* L) {
     return 1;
 }
 
-static int estring_formatNum(lua_State* L) {
-    const char* str = nullptr;
-    if (lua_isnumber(L, 1)) {
-        double number = lua_tonumber(L, 1);
-        int wholeNumber = static_cast<int>(number);
-        char buffer[64];
-        snprintf(buffer, sizeof(buffer), "%d", wholeNumber);
-        str = buffer;
-    } else {
-        const char* input = luaL_checkstring(L, 1);
-        const char* periodPos = strchr(input, '.');
-        if (periodPos != nullptr) {
-            size_t length = periodPos - input;
-            char* wholeNumberStr = new char[length + 1];
-            strncpy(wholeNumberStr, input, length);
-            wholeNumberStr[length] = '\0';
-            str = wholeNumberStr;
-            delete[] wholeNumberStr;
-        } else {
-            str = input;
-        }
-    }
-    size_t strLength = strlen(str);
-    size_t commaCount = (strLength - 1) / 3;
-    size_t resultLength = strLength + commaCount;
-    char* result = new char[resultLength + 1];
-    const char* src = str + strLength - 1;
-    char* dest = result + resultLength - 1;
-    int count = 0;
-    while (src >= str) {
-        *dest-- = *src--;
-        if (++count % 3 == 0 && src >= str) {
-            *dest-- = ',';
-        }
-    }
-    lua_pushlstring(L, result, resultLength);
-    delete[] result;
-    return 1;
-}
-
 static int estring_formatTime(lua_State* L) {
     int seconds;
 
@@ -247,6 +207,43 @@ static int estring_formatTime(lua_State* L) {
     return 1;
 }
 
+static int estring_formatNumber(lua_State* L) {
+    const char* input;
+    if (lua_type(L, 1) == LUA_TSTRING) {
+        input = lua_tostring(L, 1);
+    } else if (lua_type(L, 1) == LUA_TNUMBER) {
+        double number = lua_tonumber(L, 1);
+        char buffer[64];
+        snprintf(buffer, sizeof(buffer), "%.0f", number);
+        input = buffer;
+    } else {
+        return luaL_error(L, "Invalid argument. Expected string or number.");
+    }
+
+    const char* decimalPos = strchr(input, '.');
+    const char* end = decimalPos ? decimalPos : input + strlen(input);
+    size_t length = end - input;
+    size_t resultLength = length + (length - 1) / 3;
+    char* result = new char[resultLength + 1];
+
+    const char* src = input;
+    char* dst = result + resultLength;
+    *dst-- = '\0';
+
+    int count = 0;
+    for (int i = length - 1; i >= 0; --i) {
+        *dst-- = src[i];
+        ++count;
+        if (count % 3 == 0 && i > 0) {
+            *dst-- = ',';
+        }
+    }
+
+    lua_pushlstring(L, result, resultLength);
+    delete[] result;
+    return 1;
+}
+
 static const luaL_Reg estring_functions[] = {
     { "format_time", estring_formatTime },
     { "concat", estring_concat },
@@ -256,7 +253,7 @@ static const luaL_Reg estring_functions[] = {
     { "join", estring_join },
     { "pad_start", estring_padStart },
     { "pad_end", estring_padEnd },
-    { "format_num", estring_formatNum },
+    { "format_number", estring_formatNumber },
     { 0, 0 }
 };
 
