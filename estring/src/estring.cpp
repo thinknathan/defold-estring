@@ -86,8 +86,12 @@ static int estring_split(lua_State* L) {
     for (size_t i = 1; i <= count; ++i) {
         const char* found = strstr(pos, delimiter);
         size_t segmentLength = found ? found - pos : strLength - (pos - str);
-        lua_pushlstring(L, pos, segmentLength);
+        char* segment = new char[segmentLength + 1];
+        strncpy(segment, pos, segmentLength);
+        segment[segmentLength] = '\0';
+        lua_pushstring(L, segment);
         lua_rawseti(L, -2, i);
+        delete[] segment;
         pos = found + delimiterLength;
     }
     return 1;
@@ -145,8 +149,9 @@ static int estring_padStart(lua_State* L) {
     }
     strncpy(current, padStr, remainder);
     current += remainder;
-    strcpy(current, str);
-    lua_pushlstring(L, result, resultLength);
+    strncpy(current, str, strLength);
+    current[strLength] = '\0';
+    lua_pushstring(L, result);
     delete[] result;
     return 1;
 }
@@ -166,8 +171,9 @@ static int estring_padEnd(lua_State* L) {
     size_t remainder = paddingLength % padStrLength;
     size_t resultLength = targetLength;
     char* result = new char[resultLength + 1];
-    strcpy(result, str);
-    char* current = result + strLength;
+    char* current = result;
+    strncpy(current, str, strLength);
+    current += strLength;
     for (size_t i = 0; i < padCount; ++i) {
         strncpy(current, padStr, padStrLength);
         current += padStrLength;
@@ -175,7 +181,7 @@ static int estring_padEnd(lua_State* L) {
     strncpy(current, padStr, remainder);
     current += remainder;
     *current = '\0';
-    lua_pushlstring(L, result, resultLength);
+    lua_pushstring(L, result);
     delete[] result;
     return 1;
 }
