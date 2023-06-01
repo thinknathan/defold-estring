@@ -40,31 +40,30 @@ local arr = { "Hello", "world", "Lua" }
 local joined = estring.join(arr)
 print(joined)  --> Output: HelloworldLua
 
--- Example usage of the 'padStart' function
-local paddedStart = estring.padStart("hello", "*", 10)
+-- Example usage of the 'pad_start' function
+local paddedStart = estring.pad_start("hello", "*", 10)
 print(paddedStart)  --> Output: *****hello
 
--- Example usage of the 'padEnd' function
-local paddedEnd = estring.padEnd("hello", "*", 10)
+-- Example usage of the 'pad_end' function
+local paddedEnd = estring.pad_end("hello", "*", 10)
 print(paddedEnd)  --> Output: hello*****
 
 -- Example usage of the 'formatNum' function
-local formattedNum1 = estring.formatNum(1234567890)
+local formattedNum1 = estring.format_num(1234567890)
 print(formattedNum1)  -- Output: 1,234,567,890
 
-local formattedNum2 = estring.formatNum("9876543210")
+local formattedNum2 = estring.format_num("9876543210")
 print(formattedNum2)  -- Output: 9,876,543,210
 
--- Example usage of the 'formatTime' function
-local timeStr1 = estring.formatTime(3661)
+-- Example usage of the 'format_time' function
+local timeStr1 = estring.format_time(3661)
 print(timeStr1)  -- Output: 01:01:01
 
-local timeStr2 = estring.formatTime("12345")
+local timeStr2 = estring.format_time("12345")
 print(timeStr2)  -- Output: 03:25:45
 
-local timeStr3 = estring.formatTime(59)
+local timeStr3 = estring.format_time(59)
 print(timeStr3)  -- Output: 00:59
-
 ```
 
 ## Background

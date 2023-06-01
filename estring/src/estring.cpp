@@ -236,15 +236,15 @@ static int estring_formatTime(lua_State* L) {
 }
 
 static const luaL_Reg estring_functions[] = {
-    { "formatTime", estring_formatTime },
+    { "format_time", estring_formatTime },
     { "concat", estring_concat },
     { "replace", estring_replace },
     { "trim", estring_trim },
     { "split", estring_split },
     { "join", estring_join },
-    { "padStart", estring_padStart },
-    { "padEnd", estring_padEnd },
-    { "formatNum", estring_formatNum },
+    { "pad_start", estring_padStart },
+    { "pad_end", estring_padEnd },
+    { "format_num", estring_formatNum },
     { 0, 0 }
 };
 
