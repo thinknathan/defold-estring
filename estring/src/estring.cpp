@@ -184,11 +184,23 @@ static int estring_formatNum(lua_State* L) {
     const char* str = nullptr;
     if (lua_isnumber(L, 1)) {
         double number = lua_tonumber(L, 1);
+        int wholeNumber = static_cast<int>(number);
         char buffer[64];
-        snprintf(buffer, sizeof(buffer), "%f", number);
+        snprintf(buffer, sizeof(buffer), "%d", wholeNumber);
         str = buffer;
     } else {
-        str = luaL_checkstring(L, 1);
+        const char* input = luaL_checkstring(L, 1);
+        const char* periodPos = strchr(input, '.');
+        if (periodPos != nullptr) {
+            size_t length = periodPos - input;
+            char* wholeNumberStr = new char[length + 1];
+            strncpy(wholeNumberStr, input, length);
+            wholeNumberStr[length] = '\0';
+            str = wholeNumberStr;
+            delete[] wholeNumberStr;
+        } else {
+            str = input;
+        }
     }
     size_t strLength = strlen(str);
     size_t commaCount = (strLength - 1) / 3;
