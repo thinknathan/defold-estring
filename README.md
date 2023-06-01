@@ -48,11 +48,11 @@ print(paddedStart)  --> Output: *****hello
 local paddedEnd = estring.pad_end("hello", "*", 10)
 print(paddedEnd)  --> Output: hello*****
 
--- Example usage of the 'formatNum' function
-local formattedNum1 = estring.format_num(1234567890)
+-- Example usage of the 'format_number' function
+local formattedNum1 = estring.format_number(1234567890)
 print(formattedNum1)  -- Output: 1,234,567,890
 
-local formattedNum2 = estring.format_num("9876543210")
+local formattedNum2 = estring.format_number("9876543210")
 print(formattedNum2)  -- Output: 9,876,543,210
 
 -- Example usage of the 'format_time' function
