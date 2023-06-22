@@ -6,9 +6,43 @@ You may prefer [DefString](https://github.com/subsoap/defstring) for a more robu
 
 ## Installation
 
-- Edit game.project
-- Add dependency `https://github.com/thinknathan/defold-estring/archive/main.zip` for the current version
-- Or add a specific [release](https://github.com/thinknathan/defold-estring/releases)
+1. Edit game.project
+2. Add dependency `https://github.com/thinknathan/defold-estring/archive/main.zip` for the current version
+    - Or add a specific [release](https://github.com/thinknathan/defold-estring/releases)
+
+### TypeScript Definitions
+
+1. Install these types
+
+```bash
+yarn add git+https://git@github.com/thinknathan/defold-estring.git#^1.0.0 -D
+# or
+npm install git+https://git@github.com/thinknathan/defold-estring.git#^1.0.0 --save-dev
+```
+
+2. Add `defold-estring` to `types` in `tsconfig.json`
+
+```diff
+{
+	"compilerOptions": {
+		"types": [
++			"defold-estring",
+		],
+	}
+}
+```
+
+3. Add `node_modules/@types` to `typeRoots` in `tsconfig.json` if it's not already there
+
+```diff
+{
+	"compilerOptions": {
+		"typeRoots": [
++			"node_modules/@types",
+		],
+	}
+}
+```
 
 ## Usage
 
