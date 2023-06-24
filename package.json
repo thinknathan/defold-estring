@@ -1,6 +1,6 @@
 {
 	"name": "@types/defold-estring",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Types for Defold extension implementing a variety of string-related utilities",
 	"license": "CC0-1.0",
 	"files": ["**/*.d.ts"],
