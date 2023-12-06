@@ -38,7 +38,7 @@ declare namespace estring {
 	 * @param table
 	 * @param separator
 	 */
-	export function join(table: object, separator: string): string;
+	export function join(table: string[], separator: string): string;
 	/**
 	 * Adds `padding` to start of `input` string until it reaches specified `length`
 	 * @param input
