@@ -5,5 +5,8 @@
 	"license": "CC0-1.0",
 	"files": ["**/*.d.ts"],
 	"types": "./@types/estring.d.ts",
-	"main": "./@types/estring"
+	"main": "./@types/estring",
+	"peerDependencies": {
+		"typescript-to-lua": ">=1.0.0"
+	}
 }
