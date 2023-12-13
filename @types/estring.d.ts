@@ -41,10 +41,4 @@ declare namespace estring {
 		padding: string,
 		length: number,
 	): string;
-
-	/**
-	 * Separates number of seconds into hours, minutes, and seconds with a colon in-between. Skips hours digits if they are zero.
-	 * @param input
-	 */
-	export function format_time(input: string | number): string;
 }

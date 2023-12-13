@@ -82,10 +82,19 @@
 
   - name: format_time
     type: function
-    desc: Separates number of seconds into hours, minutes, and seconds with a colon in-between. Skips hours digits if they are zero.
+    desc: Format a time value based on the specified format type
     returns:
     - name: output
       type: string
     parameters:
-    - name: seconds
+    - name: time_value
       type: [number, string]
+    - name: format_type
+      desc: 1-12-hour without seconds, 2-12-hour with seconds, 3-HH:MM:SS format, 4-HH:MM format, 5-MM:SS format
+      type: number
+    - name: delimiter
+      type: string
+    - name: AM
+      type: string
+    - name: PM
+      type: string

@@ -1,5 +1,6 @@
 #include <dmsdk/sdk.h>
 #include <cstring>
+#include <ctime>
 
 static int estring_concat(lua_State* L) {
     size_t resultLength = 0;
@@ -147,29 +148,67 @@ static int estring_padEnd(lua_State* L) {
 }
 
 static int estring_formatTime(lua_State* L) {
-    int seconds;
-
-    if (lua_type(L, 1) == LUA_TNUMBER) {
-        seconds = (int)lua_tonumber(L, 1);
-    } else if (lua_type(L, 1) == LUA_TSTRING) {
-        const char* str = lua_tostring(L, 1);
-        seconds = atoi(str);
-    } else {
+    // Check if the first parameter is a number or string
+    if (!(lua_type(L, 1) == LUA_TNUMBER || lua_type(L, 1) == LUA_TSTRING)) {
         return luaL_error(L, "Invalid argument. Expected number or string.");
     }
 
-    int hours = seconds / 3600;
-    int minutes = (seconds % 3600) / 60;
-    seconds = seconds % 60;
+    // Get format type
+    int formatType = luaL_checkinteger(L, 2);
 
-    char result[64];
-    if (hours > 0) {
-        snprintf(result, sizeof(result), "%02d:%02d:%02d", hours, minutes, seconds);
-    } else {
-        snprintf(result, sizeof(result), "%02d:%02d", minutes, seconds);
+    // Get delimiter (default to colon)
+    const char* delimiter = luaL_optstring(L, 3, ":");
+
+    // Get AM string (default to "AM")
+    const char* amString = luaL_optstring(L, 4, "AM");
+
+    // Get PM string (default to "PM")
+    const char* pmString = luaL_optstring(L, 5, "PM");
+
+    // Get the time from Lua
+    double timeValue = lua_tonumber(L, 1);
+
+    // Format the time based on the format type
+    struct tm* timeInfo;
+    time_t rawTime = static_cast<time_t>(timeValue);
+    timeInfo = localtime(&rawTime);
+
+    char formattedTime[10]; // Assuming the formatted time won't exceed 10 characters
+
+    switch (formatType) {
+        case 1:
+            strftime(formattedTime, sizeof(formattedTime), "%I:%M %p", timeInfo);
+            break;
+        case 2:
+            strftime(formattedTime, sizeof(formattedTime), "%I:%M:%S %p", timeInfo);
+            break;
+        case 3:
+            strftime(formattedTime, sizeof(formattedTime), "%H:%M:%S", timeInfo);
+            break;
+        case 4:
+            strftime(formattedTime, sizeof(formattedTime), "%H:%M", timeInfo);
+            break;
+        case 5:
+            strftime(formattedTime, sizeof(formattedTime), "%M:%S", timeInfo);
+            break;
+        default:
+            return luaL_error(L, "Invalid format type. Expected 1-6.");
     }
 
-    lua_pushstring(L, result);
+    // Replace default delimiter with the specified one
+    for (char* p = formattedTime; *p; ++p) {
+        if (*p == ':') {
+            *p = *delimiter;
+        }
+    }
+
+    // Check if it's AM or PM format
+    if (formatType == 1 || formatType == 2) {
+        lua_pushfstring(L, "%s%s", formattedTime, (timeInfo->tm_hour < 12) ? amString : pmString);
+    } else {
+        lua_pushstring(L, formattedTime);
+    }
+
     return 1;
 }
 
