@@ -66,11 +66,11 @@ end
 -- 3   banana
 
 -- Pad the start of a string
-local resultPadStart = estring.padStart("42", "0", 5)
+local resultPadStart = estring.pad_start("42", "0", 5)
 print(resultPadStart) -- Output: 00042
 
 -- Pad the end of a string
-local resultPadEnd = estring.padEnd("42", "0", 5)
+local resultPadEnd = estring.pad_end("42", "0", 5)
 print(resultPadEnd) -- Output: 42000
 
 -- Format time
