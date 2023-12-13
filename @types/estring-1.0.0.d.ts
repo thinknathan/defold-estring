@@ -4,7 +4,7 @@
 /** @noSelfInFile */
 
 /**
- * Functions for interacting with the eString native extension
+ * eString native extension for concatenation, trimming, splitting, padding, formatting time, and formatting numbers
  * @noResolution
  */
 declare namespace estring {
