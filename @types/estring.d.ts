@@ -12,17 +12,6 @@ declare namespace estring {
 	 */
 	export function concat(first: string, second: string): string;
 	/**
-	 * Replace each occurance of `search` in `subject` with `replace` value
-	 * @param subject
-	 * @param search
-	 * @param replace
-	 */
-	export function replace(
-		subject: string,
-		search: string,
-		replace: string,
-	): string;
-	/**
 	 * Trim whitespace from input
 	 * @param input
 	 */
