@@ -222,6 +222,19 @@ static int estring_formatNumber(lua_State* L) {
             return luaL_error(L, "Memory allocation error in estring_formatNumber.");
         }
 
+        // Add thousands separator every 3 digits (before the decimal point)
+        char* decimalPoint = strchr(buffer, '.');
+        if (decimalPoint == nullptr) {
+            decimalPoint = buffer + strlen(buffer); // Point to the end if no decimal point
+        }
+
+        for (char* p = decimalPoint - 1; p > buffer; --p) {
+            if ((decimalPoint - p) % 3 == 0) {
+                memmove(p + 1, p, strlen(buffer) - (p - buffer) + 1);
+                *p = *thousandsSeparator;
+            }
+        }
+
         // Replace default separators
         for (char* p = buffer; *p; ++p) {
             if (*p == ',' || *p == '.') {
@@ -239,6 +252,7 @@ static int estring_formatNumber(lua_State* L) {
 
     return 1;
 }
+
 
 static const luaL_Reg estring_functions[] = {
     { "format_time", estring_formatTime },
