@@ -159,12 +159,6 @@ static int estring_formatTime(lua_State* L) {
     // Get delimiter (default to colon)
     const char* delimiter = luaL_optstring(L, 3, ":");
 
-    // Get AM string (default to "AM")
-    const char* amString = luaL_optstring(L, 4, "AM");
-
-    // Get PM string (default to "PM")
-    const char* pmString = luaL_optstring(L, 5, "PM");
-
     // Get the time from Lua
     double timeValue = lua_tonumber(L, 1);
 
@@ -202,12 +196,7 @@ static int estring_formatTime(lua_State* L) {
         }
     }
 
-    // Check if it's AM or PM format
-    if (formatType == 1 || formatType == 2) {
-        lua_pushfstring(L, "%s%s", formattedTime, (timeInfo->tm_hour < 12) ? amString : pmString);
-    } else {
-        lua_pushstring(L, formattedTime);
-    }
+    lua_pushstring(L, formattedTime);
 
     return 1;
 }

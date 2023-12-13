@@ -74,8 +74,8 @@ local resultPadEnd = estring.pad_end("42", "0", 5)
 print(resultPadEnd) -- Output: 42000
 
 -- Format time
-local resultFormatTime = estring.format_time(os.time(), 2, "-", "AM", "PM")
-print(resultFormatTime) -- Output: 12:45:30 PM
+local resultFormatTime = estring.format_time(os.time(), 2, "-")
+print(resultFormatTime) -- Output: 12-45-30 PM
 -- Parameters:
 -- timeValue: (number or string) The time value to format. It can be either a numeric timestamp or a string representing a date and time.
 -- formatType: (integer) Specifies the desired format type:
@@ -85,8 +85,6 @@ print(resultFormatTime) -- Output: 12:45:30 PM
 -- 		4: "HH:mm"
 -- 		5: "mm:ss"
 -- delimiter: (string, optional) The delimiter used in the formatted time. Default is ":".
--- amString: (string, optional) The string representing "AM". Default is "AM".
--- pmString: (string, optional) The string representing "PM". Default is "PM".
 
 -- Format a number
 local resultFormatNumber = estring.format_number(1234567.89, 2, ",", ".")

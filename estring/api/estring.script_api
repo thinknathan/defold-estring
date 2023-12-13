@@ -94,7 +94,3 @@
       type: number
     - name: delimiter
       type: string
-    - name: AM
-      type: string
-    - name: PM
-      type: string

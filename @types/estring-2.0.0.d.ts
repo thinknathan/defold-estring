@@ -33,14 +33,10 @@ declare namespace estring {
 	 * @param formatType The format type: 1-12-hour without seconds, 2-12-hour with seconds,
 	 *                   3-HH:MM:SS format, 4-HH:MM format, 5-MM:SS format
 	 * @param delimiter Optional delimiter string (default is ":").
-	 * @param amString Optional string for AM (default is "AM").
-	 * @param pmString Optional string for PM (default is "PM").
 	 */
 	export function format_time(
 		timeValue: number | string,
 		formatType: 1 | 2 | 3 | 4 | 5,
 		delimiter?: string,
-		amString?: string,
-		pmString?: string,
 	): string;
 }
