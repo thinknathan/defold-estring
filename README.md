@@ -51,10 +51,6 @@ npm install git+https://git@github.com/thinknathan/defold-estring.git#^1.0.0 --s
 local concatenated = estring.concat("Hello", " world!")
 print(concatenated)  --> Output: Hello world!
 
--- Example usage of the 'replace' function
-local replaced = estring.replace("Hello, world!", "world", "Lua")
-print(replaced)  --> Output: Hello, Lua!
-
 -- Example usage of the 'trim' function
 local trimmed = estring.trim("   Hello, world!   ")
 print(trimmed)  --> Output: Hello, world!

@@ -15,40 +15,6 @@ static int estring_concat(lua_State* L) {
     return 1;
 }
 
-static int estring_replace(lua_State* L) {
-    const char* str = luaL_checkstring(L, 1);
-    const char* findStr = luaL_checkstring(L, 2);
-    const char* replaceStr = luaL_checkstring(L, 3);
-    size_t strLength = strlen(str);
-    size_t findStrLength = strlen(findStr);
-    size_t replaceStrLength = strlen(replaceStr);
-    size_t resultLength = strLength;
-    const char* pos = str;
-    while ((pos = strstr(pos, findStr)) != nullptr) {
-        resultLength = resultLength - findStrLength + replaceStrLength;
-        pos += findStrLength;
-    }
-    char* result = new char[resultLength + 1];
-    pos = str;
-    char* current = result;
-    while (true) {
-        const char* found = strstr(pos, findStr);
-        if (found == nullptr) {
-            strcpy(current, pos);
-            break;
-        }
-        size_t segmentLength = found - pos;
-        strncpy(current, pos, segmentLength);
-        current += segmentLength;
-        strcpy(current, replaceStr);
-        current += replaceStrLength;
-        pos = found + findStrLength;
-    }
-    lua_pushlstring(L, result, resultLength);
-    delete[] result;
-    return 1;
-}
-
 static int estring_trim(lua_State* L) {
     const char* str = luaL_checkstring(L, 1);
     const char* whitespace = " \t\n\r\f\v";
@@ -268,7 +234,6 @@ static int estring_formatNumber(lua_State* L) {
 static const luaL_Reg estring_functions[] = {
     { "format_time", estring_formatTime },
     { "concat", estring_concat },
-    { "replace", estring_replace },
     { "trim", estring_trim },
     { "split", estring_split },
     { "join", estring_join },

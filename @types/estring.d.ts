@@ -20,7 +20,7 @@ declare namespace estring {
 	export function replace(
 		subject: string,
 		search: string,
-		replace: string
+		replace: string,
 	): string;
 	/**
 	 * Trim whitespace from input
@@ -48,7 +48,7 @@ declare namespace estring {
 	export function pad_start(
 		input: string,
 		padding: string,
-		length: number
+		length: number,
 	): string;
 	/**
 	 * Adds `padding` to end of `input` string until it reaches specified `length`
@@ -59,7 +59,7 @@ declare namespace estring {
 	export function pad_end(
 		input: string,
 		padding: string,
-		length: number
+		length: number,
 	): string;
 	/**
 	 * Adds comma every 3 digits as a thousands separator
