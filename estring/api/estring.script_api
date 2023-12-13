@@ -4,63 +4,44 @@
   members:
   - name: concat
     type: function
-    desc: Joins two strings
+    desc: Joins strings or numbers into a single string
     returns:
+    - name: output
+      type: string
     parameters:
     - name: first
-      type: string
+      type: [number, string]
     - name: second
-      type: string
-    - name: output
-      type: string
-  - name: replace
-    type: function
-    desc: Replace each occurance of search in subject with replace value
-    returns:
-    parameters:
-    - name: subject
-      type: string
-    - name: search
-      type: string
-    - name: replace
-      type: string
-    - name: output
-      type: string
+      type: [number, string]
+
   - name: trim
     type: function
     desc: Trim whitespace from input
     returns:
+    - name: output
+      type: string
     parameters:
     - name: input
       type: string
-    - name: output
-      type: string
+
   - name: split
     type: function
     desc: Create a table with values from input, split by delimiter
     returns:
+    - name: output
+      type: table
     parameters:
     - name: input
       type: string
     - name: delimiter
       type: string
-    - name: output
-      type: table
-  - name: join
-    type: function
-    desc: Joins values in a table into one string, with a separator added between
-    returns:
-    parameters:
-    - name: table
-      type: table
-    - name: separator
-      type: string
-    - name: output
-      type: string
+
   - name: pad_start
     type: function
     desc: Adds padding to start of input string until it reaches specified length
     returns:
+    - name: output
+      type: string
     parameters:
     - name: input
       type: string
@@ -68,12 +49,13 @@
       type: string
     - name: length
       type: number
-    - name: output
-      type: string
+
   - name: pad_end
     type: function
     desc: Adds padding to end of input string until it reaches specified length
     returns:
+    - name: output
+      type: string
     parameters:
     - name: input
       type: string
@@ -81,23 +63,34 @@
       type: string
     - name: length
       type: number
-    - name: output
-      type: string
+
   - name: format_number
     type: function
-    desc: Adds comma every 3 digits as a thousands separator
+    desc: Prettily formats a number, such as `1000` becomes `1,000`
     returns:
-    parameters:
-    - name: input
-      type: string|number
     - name: output
       type: string
+    parameters:
+    - name: input
+      type: [number, string]
+    - name: digit_precision
+      type: number
+    - name: thousands_separator
+      type: string
+    - name: decimal_separator
+      type: string
+
   - name: format_time
     type: function
-    desc: Separates number of seconds into hours, minutes, and seconds with a colon in-between. Skips hours digits if they are zero.
+    desc: Format a time value based on the specified format type
     returns:
-    parameters:
-    - name: seconds
-      type: string|number
     - name: output
+      type: string
+    parameters:
+    - name: time_value
+      type: [number, string]
+    - name: format_type
+      desc: 1-12-hour without leading zero + without seconds, 2-12-hour with leading zero + without seconds, 3-12-hour with seconds, 4-HH:MM:SS format, 5-HH:MM format, 6-MM:SS format
+      type: number
+    - name: delimiter
       type: string

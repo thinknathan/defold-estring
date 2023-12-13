@@ -1,51 +1,42 @@
 #include <dmsdk/sdk.h>
 #include <cstring>
+#include <ctime>
 
 static int estring_concat(lua_State* L) {
-    const char* str1 = luaL_checkstring(L, 1);
-    const char* str2 = luaL_checkstring(L, 2);
-    size_t str1Length = strlen(str1);
-    size_t str2Length = strlen(str2);
-    size_t resultLength = str1Length + str2Length;
-    char* result = new char[resultLength + 1];
-    strcpy(result, str1);
-    strcpy(result + str1Length, str2);
-    lua_pushlstring(L, result, resultLength);
-    delete[] result;
-    return 1;
-}
+    size_t resultLength = 0;
 
-static int estring_replace(lua_State* L) {
-    const char* str = luaL_checkstring(L, 1);
-    const char* findStr = luaL_checkstring(L, 2);
-    const char* replaceStr = luaL_checkstring(L, 3);
-    size_t strLength = strlen(str);
-    size_t findStrLength = strlen(findStr);
-    size_t replaceStrLength = strlen(replaceStr);
-    size_t resultLength = strLength;
-    const char* pos = str;
-    while ((pos = strstr(pos, findStr)) != nullptr) {
-        resultLength = resultLength - findStrLength + replaceStrLength;
-        pos += findStrLength;
-    }
-    char* result = new char[resultLength + 1];
-    pos = str;
-    char* current = result;
-    while (true) {
-        const char* found = strstr(pos, findStr);
-        if (found == nullptr) {
-            strcpy(current, pos);
-            break;
+    int numArgs = lua_gettop(L);
+
+    for (int i = 1; i <= numArgs; ++i) {
+        if (lua_isnumber(L, i)) {
+            // If the argument is a number, convert it to a string
+            const char* numStr = lua_tostring(L, i);
+            resultLength += strlen(numStr);
+        } else if (lua_isstring(L, i)) {
+            // If the argument is a string, concatenate it
+            const char* str = lua_tostring(L, i);
+            resultLength += strlen(str);
+        } else {
+            return luaL_error(L, "Invalid argument at index %d. Expected string or number.", i);
         }
-        size_t segmentLength = found - pos;
-        strncpy(current, pos, segmentLength);
-        current += segmentLength;
-        strcpy(current, replaceStr);
-        current += replaceStrLength;
-        pos = found + findStrLength;
     }
-    lua_pushlstring(L, result, resultLength);
-    delete[] result;
+
+    char* resultBuffer = new char[resultLength + 1];
+    resultBuffer[0] = '\0';
+
+    for (int i = 1; i <= numArgs; ++i) {
+        if (lua_isnumber(L, i)) {
+            const char* numStr = lua_tostring(L, i);
+            strcat(resultBuffer, numStr);
+        } else if (lua_isstring(L, i)) {
+            const char* str = lua_tostring(L, i);
+            strcat(resultBuffer, str);
+        }
+    }
+
+    lua_pushstring(L, resultBuffer);
+    delete[] resultBuffer;
+
     return 1;
 }
 
@@ -94,51 +85,6 @@ static int estring_split(lua_State* L) {
         delete[] segment;
         pos = found + delimiterLength;
     }
-    return 1;
-}
-
-static int estring_join(lua_State* L) {
-    luaL_checktype(L, 1, LUA_TTABLE);
-    const char* delimiter = luaL_checkstring(L, 2); // Get the delimiter string from Lua
-
-    lua_pushnil(L);
-    size_t totalLength = 0;
-    while (lua_next(L, 1) != 0) {
-        if (lua_type(L, -1) == LUA_TSTRING) {
-            size_t segmentLength;
-            const char* segment = lua_tolstring(L, -1, &segmentLength);
-            totalLength += segmentLength;
-        }
-        lua_pop(L, 1);
-    }
-
-    // Add the length of the delimiter for each string in the table
-    size_t delimiterLength = strlen(delimiter);
-    totalLength += (delimiterLength * (lua_objlen(L, 1) - 1));
-
-    char* result = new char[totalLength + 1];
-    char* current = result;
-
-    lua_pushnil(L);
-    bool firstString = true; // Flag to skip adding delimiter before the first string
-    while (lua_next(L, 1) != 0) {
-        if (lua_type(L, -1) == LUA_TSTRING) {
-            size_t segmentLength;
-            const char* segment = lua_tolstring(L, -1, &segmentLength);
-            if (!firstString) {
-                strncpy(current, delimiter, delimiterLength);
-                current += delimiterLength;
-            }
-            strncpy(current, segment, segmentLength);
-            current += segmentLength;
-            firstString = false;
-        }
-        lua_pop(L, 1);
-    }
-
-    *current = '\0';
-    lua_pushlstring(L, result, totalLength);
-    delete[] result;
     return 1;
 }
 
@@ -202,76 +148,126 @@ static int estring_padEnd(lua_State* L) {
 }
 
 static int estring_formatTime(lua_State* L) {
-    int seconds;
-
-    if (lua_type(L, 1) == LUA_TNUMBER) {
-        seconds = (int)lua_tonumber(L, 1);
-    } else if (lua_type(L, 1) == LUA_TSTRING) {
-        const char* str = lua_tostring(L, 1);
-        seconds = atoi(str);
-    } else {
+    // Check if the first parameter is a number or string
+    if (!(lua_type(L, 1) == LUA_TNUMBER || lua_type(L, 1) == LUA_TSTRING)) {
         return luaL_error(L, "Invalid argument. Expected number or string.");
     }
 
-    int hours = seconds / 3600;
-    int minutes = (seconds % 3600) / 60;
-    seconds = seconds % 60;
+    // Get format type
+    int formatType = luaL_checkinteger(L, 2);
 
-    char result[64];
-    if (hours > 0) {
-        snprintf(result, sizeof(result), "%02d:%02d:%02d", hours, minutes, seconds);
-    } else {
-        snprintf(result, sizeof(result), "%02d:%02d", minutes, seconds);
+    // Get delimiter (default to colon)
+    const char* delimiter = luaL_optstring(L, 3, ":");
+
+    // Get the time from Lua
+    double timeValue = lua_tonumber(L, 1);
+
+    // Format the time based on the format type
+    struct tm* timeInfo;
+    time_t rawTime = static_cast<time_t>(timeValue);
+    timeInfo = localtime(&rawTime);
+
+    char formattedTime[15]; // Assuming the formatted time won't exceed 15 characters
+
+    switch (formatType) {
+        case 1:
+            strftime(formattedTime, sizeof(formattedTime), "%l:%M %p", timeInfo);
+            break;
+        case 2:
+            strftime(formattedTime, sizeof(formattedTime), "%I:%M %p", timeInfo);
+            break;
+        case 3:
+            strftime(formattedTime, sizeof(formattedTime), "%I:%M:%S %p", timeInfo);
+            break;
+        case 4:
+            strftime(formattedTime, sizeof(formattedTime), "%H:%M:%S", timeInfo);
+            break;
+        case 5:
+            strftime(formattedTime, sizeof(formattedTime), "%H:%M", timeInfo);
+            break;
+        case 6:
+            strftime(formattedTime, sizeof(formattedTime), "%M:%S", timeInfo);
+            break;
+        default:
+            return luaL_error(L, "Invalid format type. Expected 1-6.");
     }
 
-    lua_pushstring(L, result);
+    // Replace default delimiter with the specified one
+    for (char* p = formattedTime; *p; ++p) {
+        if (*p == ':') {
+            *p = *delimiter;
+        }
+    }
+
+    lua_pushstring(L, formattedTime);
+
     return 1;
 }
 
 static int estring_formatNumber(lua_State* L) {
-    const char* input;
-    if (lua_type(L, 1) == LUA_TSTRING) {
-        input = lua_tostring(L, 1);
-    } else if (lua_type(L, 1) == LUA_TNUMBER) {
-        double number = lua_tonumber(L, 1);
-        char buffer[64];
-        snprintf(buffer, sizeof(buffer), "%.0f", number);
-        input = buffer;
-    } else {
-        return luaL_error(L, "Invalid argument. Expected string or number.");
+    char* buffer = nullptr;
+
+    // Check if the first parameter is a number or string
+    if (!(lua_type(L, 1) == LUA_TNUMBER || lua_type(L, 1) == LUA_TSTRING)) {
+        return luaL_error(L, "Invalid argument. Expected number or string.");
     }
 
-    const char* decimalPos = strchr(input, '.');
-    const char* end = decimalPos ? decimalPos : input + strlen(input);
-    size_t length = end - input;
-    size_t resultLength = length + (length - 1) / 3;
-    char* result = new char[resultLength + 1];
+    // Determine precision
+    int precision = lua_type(L, 2) == LUA_TNUMBER ? lua_tointeger(L, 2) : 0;
 
-    const char* src = input;
-    char* dst = result + resultLength;
-    *dst-- = '\0';
+    // Get thousands separator (default to comma)
+    const char* thousandsSeparator = ",";
+    if (lua_type(L, 3) == LUA_TSTRING) {
+        thousandsSeparator = lua_tostring(L, 3);
+    }
 
-    int count = 0;
-    for (int i = length - 1; i >= 0; --i) {
-        *dst-- = src[i];
-        ++count;
-        if (count % 3 == 0 && i > 0) {
-            *dst-- = ',';
+    // Get decimal separator (default to period)
+    const char* decimalSeparator = ".";
+    if (lua_type(L, 4) == LUA_TSTRING) {
+        decimalSeparator = lua_tostring(L, 4);
+    }
+
+    // Format the number with dynamic precision
+    int result = asprintf(&buffer, "%.*f", precision, lua_tonumber(L, 1));
+
+    // Check for memory allocation error
+    if (result == -1) {
+        return luaL_error(L, "Memory allocation error in estring_formatNumber.");
+    }
+
+    // Add thousands separator every 3 digits (before the decimal point)
+    char* decimalPoint = strchr(buffer, '.');
+    if (decimalPoint == nullptr) {
+        decimalPoint = buffer + strlen(buffer); // Point to the end if no decimal point
+    }
+
+    for (char* p = decimalPoint - 1; p > buffer; --p) {
+        if ((decimalPoint - p) % 3 == 0) {
+            memmove(p + 1, p, strlen(buffer) - (p - buffer) + 1);
+            *p = *thousandsSeparator;
         }
     }
 
-    lua_pushlstring(L, result, resultLength);
-    delete[] result;
+    // Replace default separators
+    for (char* p = buffer; *p; ++p) {
+        if (*p == ',' || *p == '.') {
+            *p = (*p == ',') ? *thousandsSeparator : *decimalSeparator;
+        }
+    }
+
+    lua_pushstring(L, buffer);
+
+    // Free the allocated buffer
+    free(buffer);
+
     return 1;
 }
 
 static const luaL_Reg estring_functions[] = {
     { "format_time", estring_formatTime },
     { "concat", estring_concat },
-    { "replace", estring_replace },
     { "trim", estring_trim },
     { "split", estring_split },
-    { "join", estring_join },
     { "pad_start", estring_padStart },
     { "pad_end", estring_padEnd },
     { "format_number", estring_formatNumber },
@@ -286,7 +282,7 @@ static void LuaInit(lua_State* L) {
 
 static dmExtension::Result InitializeMyExtension(dmExtension::Params* params) {
     LuaInit(params->m_L);
-	dmLogInfo("Registered %s Extension\n", "estring");
+    dmLogInfo("Registered %s Extension\n", "estring");
     return dmExtension::RESULT_OK;
 }
 
