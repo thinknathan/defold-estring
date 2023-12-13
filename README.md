@@ -47,56 +47,53 @@ npm install git+https://git@github.com/thinknathan/defold-estring.git#^2.0.0 --s
 ## Usage
 
 ```lua
--- Example usage of the 'concat' function
-local concatenated = estring.concat("Hello", " world!")
-print(concatenated)  --> Output: Hello world!
+-- Concatenate strings and numbers
+local resultConcat = estring.concat("Hello, ", "world", 123, "!")
+print(resultConcat) -- Output: Hello, world123!
 
--- Example usage of the 'trim' function
-local trimmed = estring.trim("   Hello, world!   ")
-print(trimmed)  --> Output: Hello, world!
+-- Trim leading and trailing whitespaces
+local resultTrim = estring.trim("   This is a string with spaces   ")
+print(resultTrim) -- Output: This is a string with spaces
 
--- Example usage of the 'split' function
-local result = estring.split("Hello,world,Lua", ",")
-for i, v in ipairs(result) do
-    print(v)
+-- Split a string
+local resultSplit = estring.split("apple,orange,banana", ",")
+for i, value in ipairs(resultSplit) do
+    print(i, value)
 end
 -- Output:
--- Hello
--- world
--- Lua
+-- 1   apple
+-- 2   orange
+-- 3   banana
 
--- Example usage of the 'join' function
-local arr = { "Hello", "world", "Lua" }
-local joined = estring.join(arr, "")
-print(joined)  --> Output: HelloworldLua
+-- Pad the start of a string
+local resultPadStart = estring.padStart("42", "0", 5)
+print(resultPadStart) -- Output: 00042
 
-local joined2 = estring.join(arr, ", ")
-print(joined2)  --> Output: Hello, world, Lua
+-- Pad the end of a string
+local resultPadEnd = estring.padEnd("42", "0", 5)
+print(resultPadEnd) -- Output: 42000
 
--- Example usage of the 'pad_start' function
-local paddedStart = estring.pad_start("hello", "*", 10)
-print(paddedStart)  --> Output: *****hello
+-- Format time
+local resultFormatTime = estring.format_time(os.time(), 2, "-", "AM", "PM")
+print(resultFormatTime) -- Output: 12-31-2023 12:45:30 PM
+-- timeValue: (number or string) The time value to format. It can be either a numeric timestamp or a string representing a date and time.
+-- formatType: (integer) Specifies the desired format type:
+-- 1: "hh:mm AM/PM"
+-- 2: "hh:mm:ss AM/PM"
+-- 3: "HH:mm:ss"
+-- 4: "HH:mm"
+-- 5: "mm:ss"
+-- delimiter: (string, optional) The delimiter used in the formatted time. Default is ":".
+-- amString: (string, optional) The string representing "AM". Default is "AM".
+-- pmString: (string, optional) The string representing "PM". Default is "PM".
 
--- Example usage of the 'pad_end' function
-local paddedEnd = estring.pad_end("hello", "*", 10)
-print(paddedEnd)  --> Output: hello*****
-
--- Example usage of the 'format_number' function
-local formattedNum1 = estring.format_number(1234567890)
-print(formattedNum1)  -- Output: 1,234,567,890
-
-local formattedNum2 = estring.format_number("9876543210")
-print(formattedNum2)  -- Output: 9,876,543,210
-
--- Example usage of the 'format_time' function
-local timeStr1 = estring.format_time(3661)
-print(timeStr1)  -- Output: 01:01:01
-
-local timeStr2 = estring.format_time("12345")
-print(timeStr2)  -- Output: 03:25:45
-
-local timeStr3 = estring.format_time(59)
-print(timeStr3)  -- Output: 00:59
+-- Format a number
+local resultFormatNumber = estring.format_number(1234567.89, 2, ",", ".")
+print(resultFormatNumber) -- Output: 1,234,567.89
+-- numberValue: (number or string) The number to format.
+-- precision: (integer, optional) The number of decimal places. Default is 0.
+-- thousandsSeparator: (string, optional) The character used as a separator for thousands. Default is ",".
+-- decimalSeparator: (string, optional) The character used as a decimal point. Default is ".".
 ```
 
 ## Background
