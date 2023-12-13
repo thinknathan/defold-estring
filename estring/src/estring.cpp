@@ -173,7 +173,7 @@ static int estring_formatTime(lua_State* L) {
     time_t rawTime = static_cast<time_t>(timeValue);
     timeInfo = localtime(&rawTime);
 
-    char formattedTime[10]; // Assuming the formatted time won't exceed 10 characters
+    char formattedTime[11]; // Assuming the formatted time won't exceed 11 characters
 
     switch (formatType) {
         case 1:
@@ -204,10 +204,19 @@ static int estring_formatTime(lua_State* L) {
 
     // Check if it's AM or PM format
     if (formatType == 1 || formatType == 2) {
-        lua_pushfstring(L, "%s%s", formattedTime, (timeInfo->tm_hour < 12) ? amString : pmString);
-    } else {
-        lua_pushstring(L, formattedTime);
+        const char* amPmString = (timeInfo->tm_hour < 12) ? amString : pmString;
+        size_t amPmLength = strlen(amPmString);
+
+        // Check if there is enough space in the buffer to append AM/PM
+        if (resultLength + amPmLength <= sizeof(formattedTime)) {
+            strcat(formattedTime, amPmString);
+        } else {
+            // Handle the case where AM/PM can't fit in the buffer
+            return luaL_error(L, "Formatted time too long for buffer.");
+        }
     }
+
+    lua_pushstring(L, formattedTime);
 
     return 1;
 }
@@ -290,7 +299,7 @@ static void LuaInit(lua_State* L) {
 
 static dmExtension::Result InitializeMyExtension(dmExtension::Params* params) {
     LuaInit(params->m_L);
-	dmLogInfo("Registered %s Extension\n", "estring");
+    dmLogInfo("Registered %s Extension\n", "estring");
     return dmExtension::RESULT_OK;
 }
 
