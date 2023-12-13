@@ -84,7 +84,7 @@
       type: string
     parameters:
     - name: input
-      type: string|number
+      type: [number, string]
     - name: digit_precision
       type: number
     - name: thousands_separator
@@ -100,4 +100,4 @@
       type: string
     parameters:
     - name: seconds
-      type: string|number
+      type: [number, string]

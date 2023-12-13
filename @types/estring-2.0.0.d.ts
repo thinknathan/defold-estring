@@ -15,7 +15,7 @@ declare namespace estring {
 	 * @param thousandsSeparator comma by default
 	 * @param decimalSeparator period by default
 	 */
-	function format_number(
+	export function format_number(
 		input: string | number,
 		digitPrecision?: number,
 		thousandsSeparator?: string,
