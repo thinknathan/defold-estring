@@ -17,7 +17,7 @@ declare namespace estring {
 	 */
 	function format_number(
 		input: string | number,
-		roundNumber?: boolean,
+		digitPrecision?: number,
 		thousandsSeparator?: string,
 		decimalSeparator?: string,
 	): string;

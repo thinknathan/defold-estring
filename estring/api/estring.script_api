@@ -85,8 +85,8 @@
     parameters:
     - name: input
       type: string|number
-    - name: round_numer
-      type: boolean
+    - name: digit_precision
+      type: number
     - name: thousands_separator
       type: string
     - name: decimal_separator

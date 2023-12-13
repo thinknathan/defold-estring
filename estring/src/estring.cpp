@@ -1,6 +1,5 @@
 #include <dmsdk/sdk.h>
 #include <cstring>
-#include <cfloat>
 
 static int estring_concat(lua_State* L) {
     const char* str1 = luaL_checkstring(L, 1);
@@ -200,8 +199,8 @@ static int estring_formatNumber(lua_State* L) {
     char* buffer = nullptr;
 
     if (lua_type(L, 1) == LUA_TSTRING || lua_type(L, 1) == LUA_TNUMBER) {
-        // Determine precision dynamically
-        int precision = lua_toboolean(L, 2) ? lua_tointeger(L, 2) : DBL_DIG;
+        // Determine precision
+        int precision = lua_type(L, 2) == LUA_TNUMBER ? lua_tointeger(L, 2) : 0;
 
         // Get thousands separator (default to comma)
         const char* thousandsSeparator = ",";
@@ -225,10 +224,8 @@ static int estring_formatNumber(lua_State* L) {
 
         // Replace default separators
         for (char* p = buffer; *p; ++p) {
-            if (*p == ',') {
-                *p = *thousandsSeparator;
-            } else if (*p == '.') {
-                *p = *decimalSeparator;
+            if (*p == ',' || *p == '.') {
+                *p = (*p == ',') ? *thousandsSeparator : *decimalSeparator;
             }
         }
 
