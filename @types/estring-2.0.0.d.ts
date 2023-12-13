@@ -16,7 +16,7 @@ declare namespace estring {
 	/**
 	 * Prettily formats a number, such as `1000` becomes `1,000`
 	 * @param input
-	 * @param roundNumber false by default
+	 * @param digitPrecision 0 by default
 	 * @param thousandsSeparator comma by default
 	 * @param decimalSeparator period by default
 	 */
