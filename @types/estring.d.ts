@@ -6,13 +6,6 @@
  */
 declare namespace estring {
 	/**
-	 * Joins two strings
-	 * @param first
-	 * @param second
-	 */
-	export function concat(first: string, second: string): string;
-
-	/**
 	 * Trim whitespace from input
 	 * @param input
 	 */

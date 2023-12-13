@@ -2,16 +2,40 @@
 #include <cstring>
 
 static int estring_concat(lua_State* L) {
-    const char* str1 = luaL_checkstring(L, 1);
-    const char* str2 = luaL_checkstring(L, 2);
-    size_t str1Length = strlen(str1);
-    size_t str2Length = strlen(str2);
-    size_t resultLength = str1Length + str2Length;
-    char* result = new char[resultLength + 1];
-    strcpy(result, str1);
-    strcpy(result + str1Length, str2);
-    lua_pushlstring(L, result, resultLength);
-    delete[] result;
+    size_t resultLength = 0;
+
+    int numArgs = lua_gettop(L);
+
+    for (int i = 1; i <= numArgs; ++i) {
+        if (lua_isnumber(L, i)) {
+            // If the argument is a number, convert it to a string
+            const char* numStr = lua_tostring(L, i);
+            resultLength += strlen(numStr);
+        } else if (lua_isstring(L, i)) {
+            // If the argument is a string, concatenate it
+            const char* str = lua_tostring(L, i);
+            resultLength += strlen(str);
+        } else {
+            return luaL_error(L, "Invalid argument at index %d. Expected string or number.", i);
+        }
+    }
+
+    char* resultBuffer = new char[resultLength + 1];
+    resultBuffer[0] = '\0';
+
+    for (int i = 1; i <= numArgs; ++i) {
+        if (lua_isnumber(L, i)) {
+            const char* numStr = lua_tostring(L, i);
+            strcat(resultBuffer, numStr);
+        } else if (lua_isstring(L, i)) {
+            const char* str = lua_tostring(L, i);
+            strcat(resultBuffer, str);
+        }
+    }
+
+    lua_pushstring(L, resultBuffer);
+    delete[] resultBuffer;
+
     return 1;
 }
 

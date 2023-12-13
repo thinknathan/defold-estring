@@ -9,6 +9,11 @@
  */
 declare namespace estring {
 	/**
+	 * Joins strings or numbers into a single string
+	 */
+	export function concat(...args: Array<string | number>): string;
+
+	/**
 	 * Prettily formats a number, such as `1000` becomes `1,000`
 	 * @param input
 	 * @param roundNumber false by default

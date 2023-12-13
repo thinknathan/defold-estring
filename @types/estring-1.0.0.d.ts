@@ -9,6 +9,13 @@
  */
 declare namespace estring {
 	/**
+	 * Joins two strings
+	 * @param first
+	 * @param second
+	 */
+	export function concat(first: string, second: string): string;
+
+	/**
 	 * Replace each occurance of `search` in `subject` with `replace` value
 	 * @param subject
 	 * @param search
@@ -19,6 +26,7 @@ declare namespace estring {
 		search: string,
 		replace: string,
 	): string;
+
 	/**
 	 * Adds comma every 3 digits as a thousands separator
 	 * @param input
