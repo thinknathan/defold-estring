@@ -195,57 +195,57 @@ static int estring_formatTime(lua_State* L) {
 }
 
 static int estring_formatNumber(lua_State* L) {
-    const char* input;
     char* buffer = nullptr;
 
-    if (lua_type(L, 1) == LUA_TSTRING || lua_type(L, 1) == LUA_TNUMBER) {
-        // Determine precision
-        int precision = lua_type(L, 2) == LUA_TNUMBER ? lua_tointeger(L, 2) : 0;
-
-        // Get thousands separator (default to comma)
-        const char* thousandsSeparator = ",";
-        if (lua_type(L, 3) == LUA_TSTRING) {
-            thousandsSeparator = lua_tostring(L, 3);
-        }
-
-        // Get decimal separator (default to period)
-        const char* decimalSeparator = ".";
-        if (lua_type(L, 4) == LUA_TSTRING) {
-            decimalSeparator = lua_tostring(L, 4);
-        }
-
-        // Format the number with dynamic precision
-        int result = asprintf(&buffer, "%.*f", precision, lua_tonumber(L, 1));
-
-        // Check for memory allocation error
-        if (result == -1) {
-            return luaL_error(L, "Memory allocation error in estring_formatNumber.");
-        }
-
-        // Add thousands separator every 3 digits (before the decimal point)
-        char* decimalPoint = strchr(buffer, '.');
-        if (decimalPoint == nullptr) {
-            decimalPoint = buffer + strlen(buffer); // Point to the end if no decimal point
-        }
-
-        for (char* p = decimalPoint - 1; p > buffer; --p) {
-            if ((decimalPoint - p) % 3 == 0) {
-                memmove(p + 1, p, strlen(buffer) - (p - buffer) + 1);
-                *p = *thousandsSeparator;
-            }
-        }
-
-        // Replace default separators
-        for (char* p = buffer; *p; ++p) {
-            if (*p == ',' || *p == '.') {
-                *p = (*p == ',') ? *thousandsSeparator : *decimalSeparator;
-            }
-        }
-
-        lua_pushstring(L, buffer);
-    } else {
-        return luaL_error(L, "Invalid argument. Expected string or number.");
+    // Check if the first parameter is a number or string
+    if (!(lua_type(L, 1) == LUA_TNUMBER || lua_type(L, 1) == LUA_TSTRING)) {
+        return luaL_error(L, "Invalid argument. Expected number or string.");
     }
+
+    // Determine precision
+    int precision = lua_type(L, 2) == LUA_TNUMBER ? lua_tointeger(L, 2) : 0;
+
+    // Get thousands separator (default to comma)
+    const char* thousandsSeparator = ",";
+    if (lua_type(L, 3) == LUA_TSTRING) {
+        thousandsSeparator = lua_tostring(L, 3);
+    }
+
+    // Get decimal separator (default to period)
+    const char* decimalSeparator = ".";
+    if (lua_type(L, 4) == LUA_TSTRING) {
+        decimalSeparator = lua_tostring(L, 4);
+    }
+
+    // Format the number with dynamic precision
+    int result = asprintf(&buffer, "%.*f", precision, lua_tonumber(L, 1));
+
+    // Check for memory allocation error
+    if (result == -1) {
+        return luaL_error(L, "Memory allocation error in estring_formatNumber.");
+    }
+
+    // Add thousands separator every 3 digits (before the decimal point)
+    char* decimalPoint = strchr(buffer, '.');
+    if (decimalPoint == nullptr) {
+        decimalPoint = buffer + strlen(buffer); // Point to the end if no decimal point
+    }
+
+    for (char* p = decimalPoint - 1; p > buffer; --p) {
+        if ((decimalPoint - p) % 3 == 0) {
+            memmove(p + 1, p, strlen(buffer) - (p - buffer) + 1);
+            *p = *thousandsSeparator;
+        }
+    }
+
+    // Replace default separators
+    for (char* p = buffer; *p; ++p) {
+        if (*p == ',' || *p == '.') {
+            *p = (*p == ',') ? *thousandsSeparator : *decimalSeparator;
+        }
+    }
+
+    lua_pushstring(L, buffer);
 
     // Free the allocated buffer
     free(buffer);
