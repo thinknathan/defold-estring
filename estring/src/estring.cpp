@@ -196,18 +196,11 @@ static int estring_formatTime(lua_State* L) {
 
 static int estring_formatNumber(lua_State* L) {
     const char* input;
-    char* buffer = nullptr; // Added buffer variable
+    char* buffer = nullptr;
 
-    if (lua_type(L, 1) == LUA_TSTRING) {
-        input = lua_tostring(L, 1);
-    } else if (lua_type(L, 1) == LUA_TNUMBER) {
-        double number = lua_tonumber(L, 1);
-
-        // Check if rounding is requested
-        bool roundNumber = false;
-        if (lua_type(L, 2) == LUA_TBOOLEAN) {
-            roundNumber = (lua_toboolean(L, 2) != 0);  // Convert boolean to integer
-        }
+    if (lua_type(L, 1) == LUA_TSTRING || lua_type(L, 1) == LUA_TNUMBER) {
+        // Determine precision dynamically
+        int precision = lua_toboolean(L, 2) ? lua_tointeger(L, 2) : DBL_DIG;
 
         // Get thousands separator (default to comma)
         const char* thousandsSeparator = ",";
@@ -221,11 +214,12 @@ static int estring_formatNumber(lua_State* L) {
             decimalSeparator = lua_tostring(L, 4);
         }
 
-        // Format the number
-        if (roundNumber) {
-            asprintf(&buffer, "%'f", number);  // Allocates memory using asprintf
-        } else {
-            asprintf(&buffer, "%f", number);  // Allocates memory using asprintf
+        // Format the number with dynamic precision
+        int result = asprintf(&buffer, "%.*f", precision, lua_tonumber(L, 1));
+
+        // Check for memory allocation error
+        if (result == -1) {
+            return luaL_error(L, "Memory allocation error in estring_formatNumber.");
         }
 
         // Replace default separators
@@ -237,12 +231,10 @@ static int estring_formatNumber(lua_State* L) {
             }
         }
 
-        input = buffer;
+        lua_pushstring(L, buffer);
     } else {
         return luaL_error(L, "Invalid argument. Expected string or number.");
     }
-
-    lua_pushstring(L, input);
 
     // Free the allocated buffer
     free(buffer);
