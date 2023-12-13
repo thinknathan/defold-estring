@@ -36,18 +36,6 @@
     - name: delimiter
       type: string
 
-  - name: join
-    type: function
-    desc: Joins values in a table into one string, with a separator added between
-    returns:
-    - name: output
-      type: string
-    parameters:
-    - name: table
-      type: table
-    - name: separator
-      type: string
-
   - name: pad_start
     type: function
     desc: Adds padding to start of input string until it reaches specified length

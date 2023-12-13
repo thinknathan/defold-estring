@@ -24,4 +24,10 @@ declare namespace estring {
 	 * @param input
 	 */
 	export function format_number(input: string | number): string;
+	/**
+	 * Joins values in a `table` into one string, with a `separator` added between
+	 * @param table
+	 * @param separator
+	 */
+	export function join(table: string[], separator: string): string;
 }
