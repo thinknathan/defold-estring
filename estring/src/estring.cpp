@@ -171,18 +171,21 @@ static int estring_formatTime(lua_State* L) {
 
     switch (formatType) {
         case 1:
-            strftime(formattedTime, sizeof(formattedTime), "%I:%M %p", timeInfo);
+            strftime(formattedTime, sizeof(formattedTime), "%l:%M %p", timeInfo);
             break;
         case 2:
-            strftime(formattedTime, sizeof(formattedTime), "%I:%M:%S %p", timeInfo);
+            strftime(formattedTime, sizeof(formattedTime), "%I:%M %p", timeInfo);
             break;
         case 3:
-            strftime(formattedTime, sizeof(formattedTime), "%H:%M:%S", timeInfo);
+            strftime(formattedTime, sizeof(formattedTime), "%I:%M:%S %p", timeInfo);
             break;
         case 4:
-            strftime(formattedTime, sizeof(formattedTime), "%H:%M", timeInfo);
+            strftime(formattedTime, sizeof(formattedTime), "%H:%M:%S", timeInfo);
             break;
         case 5:
+            strftime(formattedTime, sizeof(formattedTime), "%H:%M", timeInfo);
+            break;
+        case 6:
             strftime(formattedTime, sizeof(formattedTime), "%M:%S", timeInfo);
             break;
         default:

@@ -90,7 +90,7 @@
     - name: time_value
       type: [number, string]
     - name: format_type
-      desc: 1-12-hour without seconds, 2-12-hour with seconds, 3-HH:MM:SS format, 4-HH:MM format, 5-MM:SS format
+      desc: 1-12-hour without leading zero + without seconds, 2-12-hour with leading zero + without seconds, 3-12-hour with seconds, 4-HH:MM:SS format, 5-HH:MM format, 6-MM:SS format
       type: number
     - name: delimiter
       type: string

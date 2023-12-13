@@ -30,13 +30,14 @@ declare namespace estring {
 	/**
 	 * Format a time value based on the specified format type
 	 * @param timeValue The time value (number or string).
-	 * @param formatType The format type: 1-12-hour without seconds, 2-12-hour with seconds,
-	 *                   3-HH:MM:SS format, 4-HH:MM format, 5-MM:SS format
+	 * @param formatType The format type: 1-12-hour without leading zero + without seconds,
+	 * 									 2-12-hour with leading zero + without seconds, 3-12-hour with seconds,
+	 *                   4-HH:MM:SS format, 5-HH:MM format, 6-MM:SS format
 	 * @param delimiter Optional delimiter string (default is ":").
 	 */
 	export function format_time(
 		timeValue: number | string,
-		formatType: 1 | 2 | 3 | 4 | 5,
+		formatType: 1 | 2 | 3 | 4 | 5 | 6,
 		delimiter?: string,
 	): string;
 }

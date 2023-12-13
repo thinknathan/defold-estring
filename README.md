@@ -79,11 +79,12 @@ print(resultFormatTime) -- Output: 12-45-30 PM
 -- Parameters:
 -- timeValue: (number or string) The time value to format. It can be either a numeric timestamp or a string representing a date and time.
 -- formatType: (integer) Specifies the desired format type:
--- 		1: "hh:mm AM/PM"
--- 		2: "hh:mm:ss AM/PM"
--- 		3: "HH:mm:ss"
--- 		4: "HH:mm"
--- 		5: "mm:ss"
+-- 		1: "h:mm AM/PM"
+-- 		2: "hh:mm AM/PM"
+-- 		3: "hh:mm:ss AM/PM"
+-- 		4: "HH:mm:ss"
+-- 		5: "HH:mm"
+-- 		6: "mm:ss"
 -- delimiter: (string, optional) The delimiter used in the formatted time. Default is ":".
 
 -- Format a number
