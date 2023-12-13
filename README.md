@@ -15,9 +15,9 @@ You may prefer [DefString](https://github.com/subsoap/defstring) for a more robu
 1. Install these types
 
 ```bash
-yarn add git+https://git@github.com/thinknathan/defold-estring.git#^1.0.0 -D
+yarn add git+https://git@github.com/thinknathan/defold-estring.git#^2.0.0 -D
 # or
-npm install git+https://git@github.com/thinknathan/defold-estring.git#^1.0.0 --save-dev
+npm install git+https://git@github.com/thinknathan/defold-estring.git#^2.0.0 --save-dev
 ```
 
 2. Add `defold-estring` to `types` in `tsconfig.json`
