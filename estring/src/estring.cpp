@@ -1,5 +1,6 @@
 #include <dmsdk/sdk.h>
 #include <cstring>
+#include <cfloat>
 
 static int estring_concat(lua_State* L) {
     const char* str1 = luaL_checkstring(L, 1);
