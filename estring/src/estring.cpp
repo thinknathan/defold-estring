@@ -173,7 +173,7 @@ static int estring_formatTime(lua_State* L) {
     time_t rawTime = static_cast<time_t>(timeValue);
     timeInfo = localtime(&rawTime);
 
-    char formattedTime[11]; // Assuming the formatted time won't exceed 11 characters
+    char formattedTime[15]; // Assuming the formatted time won't exceed 15 characters
 
     switch (formatType) {
         case 1:
@@ -204,19 +204,10 @@ static int estring_formatTime(lua_State* L) {
 
     // Check if it's AM or PM format
     if (formatType == 1 || formatType == 2) {
-        const char* amPmString = (timeInfo->tm_hour < 12) ? amString : pmString;
-        size_t amPmLength = strlen(amPmString);
-
-        // Check if there is enough space in the buffer to append AM/PM
-        if (resultLength + amPmLength <= sizeof(formattedTime)) {
-            strcat(formattedTime, amPmString);
-        } else {
-            // Handle the case where AM/PM can't fit in the buffer
-            return luaL_error(L, "Formatted time too long for buffer.");
-        }
+        lua_pushfstring(L, "%s%s", formattedTime, (timeInfo->tm_hour < 12) ? amString : pmString);
+    } else {
+        lua_pushstring(L, formattedTime);
     }
-
-    lua_pushstring(L, formattedTime);
 
     return 1;
 }
