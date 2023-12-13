@@ -1,6 +1,6 @@
 # defold-estring
 
-Defold extension implementing a variety of string-related utilities.
+Defold extension implementing a variety of string-related utilities, including concatenation, trimming, splitting, padding, formatting time, and formatting numbers.
 
 You may prefer [DefString](https://github.com/subsoap/defstring) for a more robust implementation.
 
@@ -75,14 +75,15 @@ print(resultPadEnd) -- Output: 42000
 
 -- Format time
 local resultFormatTime = estring.format_time(os.time(), 2, "-", "AM", "PM")
-print(resultFormatTime) -- Output: 12-31-2023 12:45:30 PM
+print(resultFormatTime) -- Output: 12:45:30 PM
+-- Parameters:
 -- timeValue: (number or string) The time value to format. It can be either a numeric timestamp or a string representing a date and time.
 -- formatType: (integer) Specifies the desired format type:
--- 1: "hh:mm AM/PM"
--- 2: "hh:mm:ss AM/PM"
--- 3: "HH:mm:ss"
--- 4: "HH:mm"
--- 5: "mm:ss"
+-- 		1: "hh:mm AM/PM"
+-- 		2: "hh:mm:ss AM/PM"
+-- 		3: "HH:mm:ss"
+-- 		4: "HH:mm"
+-- 		5: "mm:ss"
 -- delimiter: (string, optional) The delimiter used in the formatted time. Default is ":".
 -- amString: (string, optional) The string representing "AM". Default is "AM".
 -- pmString: (string, optional) The string representing "PM". Default is "PM".
@@ -90,6 +91,7 @@ print(resultFormatTime) -- Output: 12-31-2023 12:45:30 PM
 -- Format a number
 local resultFormatNumber = estring.format_number(1234567.89, 2, ",", ".")
 print(resultFormatNumber) -- Output: 1,234,567.89
+-- Parameters:
 -- numberValue: (number or string) The number to format.
 -- precision: (integer, optional) The number of decimal places. Default is 0.
 -- thousandsSeparator: (string, optional) The character used as a separator for thousands. Default is ",".
