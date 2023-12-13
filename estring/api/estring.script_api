@@ -13,19 +13,6 @@
       type: string
     - name: output
       type: string
-  - name: replace
-    type: function
-    desc: Replace each occurance of search in subject with replace value
-    returns:
-    parameters:
-    - name: subject
-      type: string
-    - name: search
-      type: string
-    - name: replace
-      type: string
-    - name: output
-      type: string
   - name: trim
     type: function
     desc: Trim whitespace from input
