@@ -196,38 +196,57 @@ static int estring_formatTime(lua_State* L) {
 
 static int estring_formatNumber(lua_State* L) {
     const char* input;
+    char* buffer = nullptr; // Added buffer variable
+
     if (lua_type(L, 1) == LUA_TSTRING) {
         input = lua_tostring(L, 1);
     } else if (lua_type(L, 1) == LUA_TNUMBER) {
         double number = lua_tonumber(L, 1);
-        char buffer[64];
-        snprintf(buffer, sizeof(buffer), "%.0f", number);
+
+        // Check if rounding is requested
+        bool roundNumber = false;
+        if (lua_type(L, 2) == LUA_TBOOLEAN) {
+            roundNumber = (lua_toboolean(L, 2) != 0);  // Convert boolean to integer
+        }
+
+        // Get thousands separator (default to comma)
+        const char* thousandsSeparator = ",";
+        if (lua_type(L, 3) == LUA_TSTRING) {
+            thousandsSeparator = lua_tostring(L, 3);
+        }
+
+        // Get decimal separator (default to period)
+        const char* decimalSeparator = ".";
+        if (lua_type(L, 4) == LUA_TSTRING) {
+            decimalSeparator = lua_tostring(L, 4);
+        }
+
+        // Format the number
+        if (roundNumber) {
+            asprintf(&buffer, "%'f", number);  // Allocates memory using asprintf
+        } else {
+            asprintf(&buffer, "%f", number);  // Allocates memory using asprintf
+        }
+
+        // Replace default separators
+        for (char* p = buffer; *p; ++p) {
+            if (*p == ',') {
+                *p = *thousandsSeparator;
+            } else if (*p == '.') {
+                *p = *decimalSeparator;
+            }
+        }
+
         input = buffer;
     } else {
         return luaL_error(L, "Invalid argument. Expected string or number.");
     }
 
-    const char* decimalPos = strchr(input, '.');
-    const char* end = decimalPos ? decimalPos : input + strlen(input);
-    size_t length = end - input;
-    size_t resultLength = length + (length - 1) / 3;
-    char* result = new char[resultLength + 1];
+    lua_pushstring(L, input);
 
-    const char* src = input;
-    char* dst = result + resultLength;
-    *dst-- = '\0';
+    // Free the allocated buffer
+    free(buffer);
 
-    int count = 0;
-    for (int i = length - 1; i >= 0; --i) {
-        *dst-- = src[i];
-        ++count;
-        if (count % 3 == 0 && i > 0) {
-            *dst-- = ',';
-        }
-    }
-
-    lua_pushlstring(L, result, resultLength);
-    delete[] result;
     return 1;
 }
 

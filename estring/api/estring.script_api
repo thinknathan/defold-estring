@@ -6,48 +6,54 @@
     type: function
     desc: Joins two strings
     returns:
+    - name: output
+      type: string
     parameters:
     - name: first
       type: string
     - name: second
       type: string
-    - name: output
-      type: string
+
   - name: trim
     type: function
     desc: Trim whitespace from input
     returns:
+    - name: output
+      type: string
     parameters:
     - name: input
       type: string
-    - name: output
-      type: string
+
   - name: split
     type: function
     desc: Create a table with values from input, split by delimiter
     returns:
+    - name: output
+      type: table
     parameters:
     - name: input
       type: string
     - name: delimiter
       type: string
-    - name: output
-      type: table
+
   - name: join
     type: function
     desc: Joins values in a table into one string, with a separator added between
     returns:
+    - name: output
+      type: string
     parameters:
     - name: table
       type: table
     - name: separator
       type: string
-    - name: output
-      type: string
+
   - name: pad_start
     type: function
     desc: Adds padding to start of input string until it reaches specified length
     returns:
+    - name: output
+      type: string
     parameters:
     - name: input
       type: string
@@ -55,12 +61,13 @@
       type: string
     - name: length
       type: number
-    - name: output
-      type: string
+
   - name: pad_end
     type: function
     desc: Adds padding to end of input string until it reaches specified length
     returns:
+    - name: output
+      type: string
     parameters:
     - name: input
       type: string
@@ -68,23 +75,29 @@
       type: string
     - name: length
       type: number
-    - name: output
-      type: string
+
   - name: format_number
     type: function
-    desc: Adds comma every 3 digits as a thousands separator
+    desc: Prettily formats a number, such as `1000` becomes `1,000`
     returns:
+    - name: output
+      type: string
     parameters:
     - name: input
       type: string|number
-    - name: output
+    - name: round_numer
+      type: boolean
+    - name: thousands_separator
       type: string
+    - name: decimal_separator
+      type: string
+
   - name: format_time
     type: function
     desc: Separates number of seconds into hours, minutes, and seconds with a colon in-between. Skips hours digits if they are zero.
     returns:
+    - name: output
+      type: string
     parameters:
     - name: seconds
       type: string|number
-    - name: output
-      type: string

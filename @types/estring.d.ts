@@ -51,11 +51,6 @@ declare namespace estring {
 		length: number,
 	): string;
 	/**
-	 * Adds comma every 3 digits as a thousands separator
-	 * @param input
-	 */
-	export function format_number(input: string | number): string;
-	/**
 	 * Separates number of seconds into hours, minutes, and seconds with a colon in-between. Skips hours digits if they are zero.
 	 * @param input
 	 */

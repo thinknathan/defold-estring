@@ -19,4 +19,9 @@ declare namespace estring {
 		search: string,
 		replace: string,
 	): string;
+	/**
+	 * Adds comma every 3 digits as a thousands separator
+	 * @param input
+	 */
+	export function format_number(input: string | number): string;
 }
