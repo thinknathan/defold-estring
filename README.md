@@ -1,6 +1,6 @@
 # defold-estring
 
-Defold extension implementing a variety of string-related utilities, including concatenation, trimming, splitting, padding, formatting time, and formatting numbers.
+Defold native extension implementing a variety of string-related utilities, including concatenation, trimming, splitting, padding, formatting time, and formatting numbers.
 
 You may prefer [DefString](https://github.com/subsoap/defstring) for a more robust implementation.
 
