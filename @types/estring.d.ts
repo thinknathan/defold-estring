@@ -1,25 +1,25 @@
 /** @noSelfInFile */
 
 /**
- * eString native extension for concatenation, trimming, splitting, padding, formatting time, and formatting numbers
+ * Defold native extension with functions for string manipulation in Lua scripts.
  * @noResolution
  */
 declare namespace estring {
 	/**
-	 * Trim whitespace from input
-	 * @param input
+	 * Removes leading and trailing whitespace from a string.
+	 * @param input String to trim.
 	 */
 	export function trim(input: string): string;
 
 	/**
-	 * Create a table with values from `input`, split by `delimiter`
+	 * Splits a string into parts using a specified delimiter and returns them in a table.
 	 * @param input
 	 * @param delimiter
 	 */
 	export function split(input: string, delimiter: string): string[];
 
 	/**
-	 * Adds `padding` to start of `input` string until it reaches specified `length`
+	 * Pads the start of a string with a specified padding string to reach a target length.
 	 * @param input
 	 * @param padding
 	 * @param length
@@ -31,7 +31,7 @@ declare namespace estring {
 	): string;
 
 	/**
-	 * Adds `padding` to end of `input` string until it reaches specified `length`
+	 * Pads the end of a string with a specified padding string to reach a target length.
 	 * @param input
 	 * @param padding
 	 * @param length

@@ -1,10 +1,10 @@
 - name: estring
   type: table
-  desc: Functions for interacting with the eString native extension
+  desc: "Defold native extension with functions for string manipulation in Lua scripts."
   members:
   - name: concat
     type: function
-    desc: Joins strings or numbers into a single string
+    desc: "Joins strings or numbers and returns the result."
     returns:
     - name: output
       type: string
@@ -16,7 +16,7 @@
 
   - name: trim
     type: function
-    desc: Trim whitespace from input
+    desc: "Removes leading and trailing whitespace from a string."
     returns:
     - name: output
       type: string
@@ -26,7 +26,7 @@
 
   - name: split
     type: function
-    desc: Create a table with values from input, split by delimiter
+    desc: "Splits a string into parts using a specified delimiter and returns them in a table."
     returns:
     - name: output
       type: table
@@ -38,7 +38,7 @@
 
   - name: pad_start
     type: function
-    desc: Adds padding to start of input string until it reaches specified length
+    desc: "Pads the start of a string with a specified padding string to reach a target length."
     returns:
     - name: output
       type: string
@@ -52,7 +52,7 @@
 
   - name: pad_end
     type: function
-    desc: Adds padding to end of input string until it reaches specified length
+    desc: "Pads the end of a string with a specified padding string to reach a target length."
     returns:
     - name: output
       type: string
@@ -66,7 +66,7 @@
 
   - name: format_number
     type: function
-    desc: Prettily formats a number, such as `1000` becomes `1,000`
+    desc: "Formats a time value based on the provided format type, optionally using a specified delimiter."
     returns:
     - name: output
       type: string
@@ -82,7 +82,7 @@
 
   - name: format_time
     type: function
-    desc: Format a time value based on the specified format type
+    desc: "Formats a number as a string with options for precision, thousands separator, and decimal separator."
     returns:
     - name: output
       type: string

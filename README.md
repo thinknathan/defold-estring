@@ -1,14 +1,39 @@
 # defold-estring
 
-Defold native extension implementing a variety of string-related utilities, including concatenation, trimming, splitting, padding, formatting time, and formatting numbers.
+Defold native extension with functions for string manipulation in Lua scripts.
 
-You may prefer [DefString](https://github.com/subsoap/defstring) for a more robust implementation.
+You may instead prefer [DefString](https://github.com/subsoap/defstring) for a more robust implementation.
+
+## Functions
+
+- `estring.concat(...)`
+- Joins strings or numbers and returns the result.
+
+- `estring.trim(str)`
+- Removes leading and trailing whitespace from a string.
+
+- `estring.split(str, delimiter)`
+- Splits a string into parts using a specified delimiter and returns them in a table.
+
+- `estring.pad_start(str, padStr, targetLength)`
+- Pads the start of a string with a specified padding string to reach a target length.
+
+- `estring.pad_end(str, padStr, targetLength)`
+- Pads the end of a string with a specified padding string to reach a target length.
+
+- `estring.format_time(timeValue, formatType, delimiter)`
+- Formats a time value based on the provided format type, optionally using a specified delimiter.
+
+- `estring.format_number(number, precision, thousandsSeparator, decimalSeparator)`
+- Formats a number as a string with options for precision, thousands separator, and decimal separator.
 
 ## Installation
 
+This extension includes types for use with [TypeScript + Defold](https://ts-defold.dev/).
+
 1. Edit game.project
 2. Add dependency `https://github.com/thinknathan/defold-estring/archive/main.zip` for the current version
-    - Or add a specific [release](https://github.com/thinknathan/defold-estring/releases)
+   - Or add a specific [release](https://github.com/thinknathan/defold-estring/releases)
 
 ### TypeScript Definitions
 
@@ -47,17 +72,20 @@ npm install git+https://git@github.com/thinknathan/defold-estring.git#^2.0.0 --s
 ## Usage
 
 ```lua
--- Concatenate strings and numbers
-local resultConcat = estring.concat("Hello, ", "world", 123, "!")
-print(resultConcat) -- Output: Hello, world123!
+-- concat
+-- Joins strings or numbers and returns the result.
+local result_concat = estring.concat("Hello, ", "world", 123, "!")
+print(result_concat) -- Output: Hello, world123!
 
--- Trim leading and trailing whitespaces
-local resultTrim = estring.trim("   This is a string with spaces   ")
-print(resultTrim) -- Output: This is a string with spaces
+-- trim
+-- Removes leading and trailing whitespace from a string.
+local result_trim = estring.trim("   This is a string with spaces   ")
+print(result_trim) -- Output: This is a string with spaces
 
--- Split a string
-local resultSplit = estring.split("apple,orange,banana", ",")
-for i, value in ipairs(resultSplit) do
+-- split
+-- Splits a string into parts using a specified delimiter and returns them in a table.
+local result_split = estring.split("apple,orange,banana", ",")
+for i, value in ipairs(result_split) do
     print(i, value)
 end
 -- Output:
@@ -65,17 +93,20 @@ end
 -- 2   orange
 -- 3   banana
 
--- Pad the start of a string
-local resultPadStart = estring.pad_start("42", "0", 5)
-print(resultPadStart) -- Output: 00042
+-- pad_start
+-- Pads the start of a string with a specified padding string to reach a target length.
+local result_pad_start = estring.pad_start("42", "0", 5)
+print(result_pad_start) -- Output: 00042
 
--- Pad the end of a string
-local resultPadEnd = estring.pad_end("42", "0", 5)
-print(resultPadEnd) -- Output: 42000
+-- pad_end
+-- Pads the end of a string with a specified padding string to reach a target length.
+local result_pad_end = estring.pad_end("42", "0", 5)
+print(result_pad_end) -- Output: 42000
 
--- Format time
-local resultFormatTime = estring.format_time(os.time(), 2, "-")
-print(resultFormatTime) -- Output: 12-45-30 PM
+-- format_time
+-- Formats a time value based on the provided format type, optionally using a specified delimiter.
+local result_format_time = estring.format_time(os.time(), 2, "-")
+print(result_format_time) -- Output: 12-45-30 PM
 -- Parameters:
 -- timeValue: (number or string) The time value to format. It can be either a numeric timestamp or a string representing a date and time.
 -- formatType: (integer) Specifies the desired format type:
@@ -87,9 +118,10 @@ print(resultFormatTime) -- Output: 12-45-30 PM
 -- 		6: "mm:ss"
 -- delimiter: (string, optional) The delimiter used in the formatted time. Default is ":".
 
--- Format a number
-local resultFormatNumber = estring.format_number(1234567.89, 2, ",", ".")
-print(resultFormatNumber) -- Output: 1,234,567.89
+-- format_number
+-- Formats a number as a string with options for precision, thousands separator, and decimal separator.
+local result_format_number = estring.format_number(1234567.89, 2, ",", ".")
+print(result_format_number) -- Output: 1,234,567.89
 -- Parameters:
 -- numberValue: (number or string) The number to format.
 -- precision: (integer, optional) The number of decimal places. Default is 0.
@@ -99,7 +131,7 @@ print(resultFormatNumber) -- Output: 1,234,567.89
 
 ## Background
 
-This project is an experiment with generating a Defold extension using Chat-GPT. The prompt was as follows:
+This project is an experiment with generating a Defold extension using Chat-GPT 3.5. The prompt was as follows:
 
 ```
 create a defold extension that exposes a module to lua, use c++ that does not use any features newer than 2009, and does not use the standard library, and always uses const char* instead of std::string. the name of the module is estring.
@@ -142,3 +174,5 @@ adjust the estring_formatNum function so that it can accept either a number or a
 ```
 Add a function that receives a single variable from lua which is either a string or a number, representing a number of seconds, and formats it as hours:minutes:seconds. If hours are zero, remove them. Return the string to lua
 ```
+
+Further adjustments were made for v2.0.0.

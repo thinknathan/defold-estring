@@ -4,7 +4,7 @@
 /** @noSelfInFile */
 
 /**
- * eString native extension for concatenation, trimming, splitting, padding, formatting time, and formatting numbers
+ * Defold native extension with functions for string manipulation in Lua scripts.
  * @noResolution
  */
 declare namespace estring {

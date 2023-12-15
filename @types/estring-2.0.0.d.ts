@@ -4,21 +4,22 @@
 /** @noSelfInFile */
 
 /**
- * eString native extension for concatenation, trimming, splitting, padding, formatting time, and formatting numbers
+ * Defold native extension with functions for string manipulation in Lua scripts.
  * @noResolution
  */
 declare namespace estring {
 	/**
-	 * Joins strings or numbers into a single string
+	 * Joins strings or numbers and returns the result.
+	 * @param args
 	 */
 	export function concat(...args: Array<string | number>): string;
 
 	/**
-	 * Prettily formats a number, such as `1000` becomes `1,000`
+	 * Formats a number as a string with options for precision, thousands separator, and decimal separator.
 	 * @param input
-	 * @param digitPrecision 0 by default
-	 * @param thousandsSeparator comma by default
-	 * @param decimalSeparator period by default
+	 * @param digitPrecision Default is 0.
+	 * @param thousandsSeparator Default is "," (comma).
+	 * @param decimalSeparator Default is "." (period).
 	 */
 	export function format_number(
 		input: string | number,
@@ -28,12 +29,14 @@ declare namespace estring {
 	): string;
 
 	/**
-	 * Format a time value based on the specified format type
-	 * @param timeValue The time value (number or string).
-	 * @param formatType The format type: 1-12-hour without leading zero + without seconds,
-	 * 									 2-12-hour with leading zero + without seconds, 3-12-hour with seconds,
-	 *                   4-HH:MM:SS format, 5-HH:MM format, 6-MM:SS format
-	 * @param delimiter Optional delimiter string (default is ":").
+	 * Formats a time value based on the provided format type, optionally using a specified delimiter.
+	 * @param timeValue
+	 * @param formatType The format type:
+	 * 									 1: 12-hour without leading zero + without seconds.
+	 * 									 2: 12-hour with leading zero + without seconds.
+	 * 									 3: 12-hour with seconds.
+	 *                   4: HH:MM:SS format. 5: HH:MM format. 6: MM:SS format.
+	 * @param delimiter Default is ":" (colon).
 	 */
 	export function format_time(
 		timeValue: number | string,
