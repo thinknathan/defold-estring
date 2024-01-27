@@ -3,36 +3,77 @@
 #include <ctime>
 #include <cstdio>
 
+// Custom double-to-string conversion for integers and limited precision
+static void _ftoa(double value, char* buffer, size_t precision) {
+    // Handle the integer part
+    int integerPart = static_cast<int>(value);
+    intToStr(integerPart, buffer);
+
+    // Check if the number is an integer
+    if (value == static_cast<double>(integerPart)) {
+        // It's an integer, set precision to 0
+        buffer[strlen(buffer)] = '\0';  // Null-terminate the string
+        return;
+    }
+
+    // Move to the decimal point position
+    size_t len = strlen(buffer);
+    buffer[len] = '.';
+
+    // Handle the fractional part with dynamic precision
+    while (precision > 0) {
+        value = (value - static_cast<int>(value)) * 10.0;
+        int digit = static_cast<int>(value);
+        buffer[++len] = '0' + digit;
+        --precision;
+    }
+
+    buffer[len + 1] = '\0';  // Null-terminate the string
+}
+
+static const char* _get_lua_arg(lua_State* L, int i) {
+    static char numStrBuffer[32];
+
+    if (lua_isnumber(L, i)) {
+        // If the argument is a number, convert it to a string and store it in the buffer
+        double numValue = lua_tonumber(L, i);
+
+        // Determine precision dynamically based on the number of decimal places
+        size_t precision = 0;
+        double decimalPart = numValue - static_cast<int>(numValue);
+        while (decimalPart > 0.0 && precision < 15) {
+            decimalPart *= 10.0;
+            decimalPart -= static_cast<int>(decimalPart);
+            ++precision;
+        }
+
+        // Convert the double to a string with dynamic precision
+        _ftoa(numValue, numStrBuffer, precision);
+
+        return numStrBuffer;
+    } else if (lua_isstring(L, i)) {
+        return lua_tostring(L, i);
+    } else {
+        return luaL_error(L, "Invalid argument at index %d. Expected string or number.", i);
+    }
+}
+
 static int estring_concat(lua_State* L) {
     size_t resultLength = 0;
 
     int numArgs = lua_gettop(L);
 
     for (int i = 1; i <= numArgs; ++i) {
-        if (lua_isnumber(L, i)) {
-            // If the argument is a number, convert it to a string
-            const char* numStr = lua_tostring(L, i);
-            resultLength += strlen(numStr);
-        } else if (lua_isstring(L, i)) {
-            // If the argument is a string, concatenate it
-            const char* str = lua_tostring(L, i);
-            resultLength += strlen(str);
-        } else {
-            return luaL_error(L, "Invalid argument at index %d. Expected string or number.", i);
-        }
+        const char* argStr = _get_lua_arg(L, i);
+        resultLength += strlen(argStr);
     }
 
     char* resultBuffer = new char[resultLength + 1];
     resultBuffer[0] = '\0';
 
     for (int i = 1; i <= numArgs; ++i) {
-        if (lua_isnumber(L, i)) {
-            const char* numStr = lua_tostring(L, i);
-            strcat(resultBuffer, numStr);
-        } else if (lua_isstring(L, i)) {
-            const char* str = lua_tostring(L, i);
-            strcat(resultBuffer, str);
-        }
+        const char* argStr = _get_lua_arg(L, i);
+        strcat(resultBuffer, argStr);
     }
 
     lua_pushstring(L, resultBuffer);
