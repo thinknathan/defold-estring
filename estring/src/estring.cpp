@@ -25,7 +25,8 @@ static const char* _get_lua_arg(lua_State* L, int i) {
     } else if (lua_isstring(L, i)) {
         return lua_tostring(L, i);
     } else {
-        return luaL_error(L, "Invalid argument at index %d. Expected string or number.", i);
+        luaL_error(L, "Invalid argument at index %d. Expected string or number.", i);
+				return nullptr;
     }
 }
 
