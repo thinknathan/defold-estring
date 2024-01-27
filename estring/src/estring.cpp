@@ -1,6 +1,7 @@
 #include <dmsdk/sdk.h>
 #include <cstring>
 #include <ctime>
+#include <cstdio>
 
 static int estring_concat(lua_State* L) {
     size_t resultLength = 0;
