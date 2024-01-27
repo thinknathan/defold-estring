@@ -2,6 +2,8 @@
 
 # Def-eString
 
+[![Build with bob](https://github.com/thinknathan/defold-estring/actions/workflows/bob.yml/badge.svg)](https://github.com/thinknathan/defold-estring/actions/workflows/bob.yml)
+
 This Defold native extension implements functions for string manipulation in Lua scripts.
 
 ## API
