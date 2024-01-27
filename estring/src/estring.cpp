@@ -3,36 +3,50 @@
 #include <ctime>
 #include <cstdio>
 
+static const char* _get_lua_arg(lua_State* L, int i) {
+    static char numStrBuffer[32];
+
+    if (lua_isnumber(L, i)) {
+        // If the argument is a number, convert it to a string using dmSnPrintf
+        double numValue = lua_tonumber(L, i);
+        int precision = 15;  // Set a default precision
+
+        // Determine precision dynamically based on the number of decimal places
+        double decimalPart = numValue - static_cast<int>(numValue);
+        while (decimalPart > 0.0 && precision > 0) {
+            decimalPart *= 10.0;
+            decimalPart -= static_cast<int>(decimalPart);
+            --precision;
+        }
+
+        // Use dmSnPrintf to format the double to a string with dynamic precision
+        dmSnPrintf(numStrBuffer, sizeof(numStrBuffer), "%.*f", precision, numValue);
+
+        return numStrBuffer;
+    } else if (lua_isstring(L, i)) {
+        return lua_tostring(L, i);
+    } else {
+        luaL_error(L, "Invalid argument at index %d. Expected string or number.", i);
+				return nullptr;
+    }
+}
+
 static int estring_concat(lua_State* L) {
     size_t resultLength = 0;
 
     int numArgs = lua_gettop(L);
 
     for (int i = 1; i <= numArgs; ++i) {
-        if (lua_isnumber(L, i)) {
-            // If the argument is a number, convert it to a string
-            const char* numStr = lua_tostring(L, i);
-            resultLength += strlen(numStr);
-        } else if (lua_isstring(L, i)) {
-            // If the argument is a string, concatenate it
-            const char* str = lua_tostring(L, i);
-            resultLength += strlen(str);
-        } else {
-            return luaL_error(L, "Invalid argument at index %d. Expected string or number.", i);
-        }
+        const char* argStr = _get_lua_arg(L, i);
+        resultLength += strlen(argStr);
     }
 
     char* resultBuffer = new char[resultLength + 1];
     resultBuffer[0] = '\0';
 
     for (int i = 1; i <= numArgs; ++i) {
-        if (lua_isnumber(L, i)) {
-            const char* numStr = lua_tostring(L, i);
-            strcat(resultBuffer, numStr);
-        } else if (lua_isstring(L, i)) {
-            const char* str = lua_tostring(L, i);
-            strcat(resultBuffer, str);
-        }
+        const char* argStr = _get_lua_arg(L, i);
+        strcat(resultBuffer, argStr);
     }
 
     lua_pushstring(L, resultBuffer);
@@ -206,7 +220,7 @@ static int estring_formatTime(lua_State* L) {
 }
 
 static int estring_formatNumber(lua_State* L) {
-    char* buffer = nullptr;
+    char buffer[128]; // Adjust the size as needed
 
     // Check if the first parameter is a number or string
     if (!(lua_type(L, 1) == LUA_TNUMBER || lua_type(L, 1) == LUA_TSTRING)) {
@@ -228,12 +242,12 @@ static int estring_formatNumber(lua_State* L) {
         decimalSeparator = lua_tostring(L, 4);
     }
 
-    // Format the number with dynamic precision
-    int result = asprintf(&buffer, "%.*f", precision, lua_tonumber(L, 1));
+    // Format the number with dynamic precision using dmSnPrintf
+    int result = dmSnPrintf(buffer, sizeof(buffer), "%.*f", precision, lua_tonumber(L, 1));
 
-    // Check for memory allocation error
-    if (result == -1) {
-        return luaL_error(L, "Memory allocation error in estring_formatNumber.");
+    // Check for dmSnPrintf error
+    if (result < 0 || result >= sizeof(buffer)) {
+        return luaL_error(L, "Error formatting number in estring_formatNumber.");
     }
 
     // Add thousands separator every 3 digits (before the decimal point)
@@ -257,9 +271,6 @@ static int estring_formatNumber(lua_State* L) {
     }
 
     lua_pushstring(L, buffer);
-
-    // Free the allocated buffer
-    free(buffer);
 
     return 1;
 }
