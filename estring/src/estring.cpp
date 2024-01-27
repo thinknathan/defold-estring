@@ -1,7 +1,6 @@
 #include <dmsdk/sdk.h>
 #include <cstring>
 #include <ctime>
-#include <cstdio>
 
 // Custom double-to-string conversion for integers and limited precision
 static void _ftoa(double value, char* buffer, size_t precision) {
@@ -247,7 +246,7 @@ static int estring_formatTime(lua_State* L) {
 }
 
 static int estring_formatNumber(lua_State* L) {
-    char* buffer = nullptr;
+    char buffer[128]; // Adjust the size as needed
 
     // Check if the first parameter is a number or string
     if (!(lua_type(L, 1) == LUA_TNUMBER || lua_type(L, 1) == LUA_TSTRING)) {
@@ -269,12 +268,12 @@ static int estring_formatNumber(lua_State* L) {
         decimalSeparator = lua_tostring(L, 4);
     }
 
-    // Format the number with dynamic precision
-    int result = asprintf(&buffer, "%.*f", precision, lua_tonumber(L, 1));
+    // Format the number with dynamic precision using dmSnPrintf
+    int result = dmSnPrintf(buffer, sizeof(buffer), "%.*f", precision);
 
-    // Check for memory allocation error
-    if (result == -1) {
-        return luaL_error(L, "Memory allocation error in estring_formatNumber.");
+    // Check for dmSnPrintf error
+    if (result < 0 || result >= sizeof(buffer)) {
+        return luaL_error(L, "Error formatting number in estring_formatNumber.");
     }
 
     // Add thousands separator every 3 digits (before the decimal point)
@@ -298,9 +297,6 @@ static int estring_formatNumber(lua_State* L) {
     }
 
     lua_pushstring(L, buffer);
-
-    // Free the allocated buffer
-    free(buffer);
 
     return 1;
 }
