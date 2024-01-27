@@ -2,8 +2,10 @@ name: Build with bob
 
 on:
   push:
-  pull_request_target:
-
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
 env:
   BUILD_SERVER: 'https://build.defold.com'
 
@@ -21,6 +23,5 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-      - name: Build
       - uses: dapetcu21/setup-defold@v3.0.3
         run: java -jar $BOB --platform=${{ matrix.platform }} build --build-server=${{env.BUILD_SERVER}}
