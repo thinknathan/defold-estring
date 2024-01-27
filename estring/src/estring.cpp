@@ -269,7 +269,7 @@ static int estring_formatNumber(lua_State* L) {
     }
 
     // Format the number with dynamic precision using dmSnPrintf
-    int result = dmSnPrintf(buffer, sizeof(buffer), "%.*f", precision);
+    int result = dmSnPrintf(buffer, sizeof(buffer), "%.*f", precision, lua_tonumber(L, 1));
 
     // Check for dmSnPrintf error
     if (result < 0 || result >= sizeof(buffer)) {
