@@ -1,10 +1,10 @@
-# defold-estring
+<img src="_docs/def-estring-x1.png" alt="Def-eString">
 
-Defold native extension with functions for string manipulation in Lua scripts.
+# Def-eString
 
-You may instead prefer [DefString](https://github.com/subsoap/defstring) for a more robust implementation.
+This Defold native extension implements functions for string manipulation in Lua scripts.
 
-## Functions
+## API
 
 - `estring.concat(...)`
 - Joins strings or numbers and returns the result.
@@ -26,6 +26,30 @@ You may instead prefer [DefString](https://github.com/subsoap/defstring) for a m
 
 - `estring.format_number(number, precision, thousandsSeparator, decimalSeparator)`
 - Formats a number as a string with options for precision, thousands separator, and decimal separator.
+
+## Background
+
+In Lua, strings are immutable. Every modification you make to a string value causes a new string object to be allocated.
+
+Example:
+
+```lua
+local first = 'the '
+local second = 'lazy '
+local third = 'dog'
+local sentence = first .. second .. third -- 'the lazy dog'
+-- An intermediate string 'the lazy ' is allocated when first and second are joined
+```
+
+This library aims to avoid the creation of intermediate Lua strings by doing the work in C++ and only returning the final result to Lua.
+
+```lua
+local first = 'the '
+local second = 'lazy '
+local third = 'dog'
+local sentence = estring.concat(first, second, third) -- 'the lazy dog'
+-- No intermediate string is allocated
+```
 
 ## Installation
 
@@ -129,50 +153,6 @@ print(result_format_number) -- Output: 1,234,567.89
 -- decimalSeparator: (string, optional) The character used as a decimal point. Default is ".".
 ```
 
-## Background
+## Alternatives
 
-This project is an experiment with generating a Defold extension using Chat-GPT 3.5. The prompt was as follows:
-
-```
-create a defold extension that exposes a module to lua, use c++ that does not use any features newer than 2009, and does not use the standard library, and always uses const char* instead of std::string. the name of the module is estring.
-
-it should have a function called concat that accepts two strings from lua and returns a concatenated string to lua.
-
-it should have a function called replace that accepts three strings from lua and returns to lua the first string with all instances of the second string replaced with the third thing.
-
-it should have a function called trim that removes whitespace from both sides of a string and returns it to lua.
-
-it should have a function called split that accepts two strings from lua, an input string and a delimiter string, and returns a table to lua with values from the first string split by the delimiter
-
-it should have a function called join that accepts a table from lua, and returns a string to lua with all strings in the table concatenated.
-
-it should have a function called padStart that accepts two strings from lua, pads the current string with another string (multiple times, if needed) until the resulting string reaches the given length, and returns the result to lua.
-
-it should have a function called padEnd that accepts two strings from lua, pads the current string with another string (multiple times, if needed) until the resulting string reaches the given length (the padding is applied from the end of the current string), and returns the result to lua.
-
-it should have a function called formatNum that a string from lua, adds a comma every third character starting from the end, and returns the result to lua.
-```
-
-Then when it used std::string anyway:
-
-```
-it must always use const char* instead of std::string
-```
-
-Then after it didn't understand how to return to Lua:
-
-```
-instead of returning a result in every function, use lua_pushlstring
-```
-
-Some add-ons
-
-```
-adjust the estring_formatNum function so that it can accept either a number or a string from lua.
-```
-
-```
-Add a function that receives a single variable from lua which is either a string or a number, representing a number of seconds, and formats it as hours:minutes:seconds. If hours are zero, remove them. Return the string to lua
-```
-
-Further adjustments were made for v2.0.0.
+[DefString](https://github.com/subsoap/defstring) is a pure Lua implementation of string manipulation.
