@@ -3,6 +3,8 @@ name: Build with bob
 on:
   pull_request:
     branches: [main]
+  schedule:
+    - cron: '0 2 2 */4 *'
   workflow_dispatch:
 env:
   BUILD_SERVER: 'https://build.defold.com'
