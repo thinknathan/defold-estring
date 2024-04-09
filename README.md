@@ -136,12 +136,12 @@ print(result_format_time) -- Output: 12-45-30 PM
 -- Parameters:
 -- timeValue: (number or string) The time value to format. It can be either a numeric timestamp or a string representing a date and time.
 -- formatType: (constant) Specifies the desired format type:
--- 	etable.FORMAT_12H: "h:mm AM/PM"
--- 	etable.FORMAT_12H_LEADING_ZERO: "hh:mm AM/PM"
--- 	etable.FORMAT_12H_LEADING_ZERO_WITH_SECONDS: "hh:mm:ss AM/PM"
--- 	etable.FORMAT_HH_MM_SS: "HH:mm:ss"
--- 	etable.FORMAT_HH_MM: "HH:mm"
--- 	etable.FORMAT_MM_SS: "mm:ss"
+-- 	estring.FORMAT_12H: "h:mm AM/PM"
+-- 	estring.FORMAT_12H_LEADING_ZERO: "hh:mm AM/PM"
+-- 	estring.FORMAT_12H_LEADING_ZERO_WITH_SECONDS: "hh:mm:ss AM/PM"
+-- 	estring.FORMAT_HH_MM_SS: "HH:mm:ss"
+-- 	estring.FORMAT_HH_MM: "HH:mm"
+-- 	estring.FORMAT_MM_SS: "mm:ss"
 -- delimiter: (string, optional) The delimiter used in the formatted time. Default is ":".
 
 -- format_number
