@@ -145,7 +145,7 @@ static int estring_padEnd(lua_State* L) {
 
 static int estring_formatTime(lua_State* L) {
 	// Check if the first parameter is a number or string
-	if (!(lua_type(L, 1) == LUA_TNUMBER || lua_type(L, 1) == LUA_TSTRING)) {
+	if (!lua_isnumber(L, 1) && !lua_isstring(L, 1)) {
 		return luaL_error(L, "Invalid argument. Expected number or string.");
 	}
 
@@ -204,22 +204,25 @@ static int estring_formatNumber(lua_State* L) {
 	char buffer[128];
 
 	// Check if the first parameter is a number or string
-	if (!(lua_type(L, 1) == LUA_TNUMBER || lua_type(L, 1) == LUA_TSTRING)) {
+	if (!lua_isnumber(L, 1) && !lua_isstring(L, 1)) {
 		return luaL_error(L, "Invalid argument. Expected number or string.");
 	}
 
 	// Determine precision
-	int precision = lua_type(L, 2) == LUA_TNUMBER ? lua_tointeger(L, 2) : 0;
+	int precision = 0;
+	if (lua_isnumber(L, 2)) {
+		precision = luaL_checkinteger(L, 2);
+	}
 
 	// Get thousands separator (default to comma)
 	const char* thousandsSeparator = ",";
-	if (lua_type(L, 3) == LUA_TSTRING) {
+	if (lua_isstring(L, 3)) {
 		thousandsSeparator = lua_tostring(L, 3);
 	}
 
 	// Get decimal separator (default to period)
 	const char* decimalSeparator = ".";
-	if (lua_type(L, 4) == LUA_TSTRING) {
+	if (lua_isstring(L, 4)) {
 		decimalSeparator = lua_tostring(L, 4);
 	}
 
