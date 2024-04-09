@@ -75,10 +75,13 @@
           type: [number, string]
         - name: digit_precision
           type: number
+          optional: true
         - name: thousands_separator
           type: string
+          optional: true
         - name: decimal_separator
           type: string
+          optional: true
 
     - name: format_time
       type: function
@@ -94,6 +97,7 @@
           type: number
         - name: delimiter
           type: string
+          optional: true
 
     - name: FORMAT_12H
       type: number

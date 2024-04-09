@@ -4,26 +4,7 @@
 #include <cstdio>
 
 static const char* _get_lua_arg(lua_State* L, int i) {
-	static char numStrBuffer[32];
-
-	if (lua_isnumber(L, i)) {
-		// If the argument is a number, convert it to a string using dmSnPrintf
-		double numValue = lua_tonumber(L, i);
-		int precision = 15;  // Set a default precision
-
-		// Determine precision dynamically based on the number of decimal places
-		double decimalPart = numValue - static_cast<int>(numValue);
-		while (decimalPart > 0.0 && precision > 0) {
-			decimalPart *= 10.0;
-			decimalPart -= static_cast<int>(decimalPart);
-			--precision;
-		}
-
-		// Use dmSnPrintf to format the double to a string with dynamic precision
-		dmSnPrintf(numStrBuffer, sizeof(numStrBuffer), "%.*f", precision, numValue);
-
-		return numStrBuffer;
-	} else if (lua_isstring(L, i)) {
+	if (lua_isnumber(L, i) || lua_isstring(L, i)) {
 		return lua_tostring(L, i);
 	} else {
 		luaL_error(L, "Invalid argument at index %d. Expected string or number.", i);

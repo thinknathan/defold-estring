@@ -1,4 +1,4 @@
-/// <library version="2.0.2" src="https://github.com/thinknathan/defold-estring/archive/refs/tags/v2.0.2.zip" />
+/// <library version="2.0.3" src="https://github.com/thinknathan/defold-estring/archive/refs/tags/v2.0.3.zip" />
 /// <reference path="./estring-2.0.0.d.ts" />
 
 /** @noSelfInFile */

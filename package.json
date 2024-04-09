@@ -1,13 +1,13 @@
 {
 	"name": "@types/defold-estring",
-	"version": "2.0.2",
+	"version": "2.0.3",
 	"description": "Types for Defold extension implementing a variety of string-related utilities",
 	"license": "CC0-1.0",
 	"files": [
 		"**/*.d.ts"
 	],
-	"types": "./@types/estring-2.0.2.d.ts",
-	"main": "./@types/estring-2.0.2",
+	"types": "./@types/estring-2.0.3.d.ts",
+	"main": "./@types/estring-2.0.3",
 	"scripts": {
 		"check": "tsc --noEmit",
 		"prettier": "prettier \"./**/*.{eslintrc,yml,json,ts,md,d.ts}\" --write"
