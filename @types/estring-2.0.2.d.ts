@@ -8,9 +8,9 @@
  * @noResolution
  */
 declare namespace estring {
-	export const FORMAT_12_HOUR_NO_SECONDS: 1;
-	export const FORMAT_12_HOUR_LEADING_ZERO_NO_SECONDS: 2;
-	export const FORMAT_12_HOUR_WITH_SECONDS: 3;
+	export const FORMAT_12H_NO_SECONDS: 1;
+	export const FORMAT_12H_LEADING_ZERO_NO_SECONDS: 2;
+	export const FORMAT_12H_WITH_SECONDS: 3;
 	export const FORMAT_HH_MM_SS: 4;
 	export const FORMAT_HH_MM: 5;
 	export const FORMAT_MM_SS: 6;
