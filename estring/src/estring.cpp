@@ -219,7 +219,7 @@ static int estring_formatTime(lua_State* L) {
 }
 
 static int estring_formatNumber(lua_State* L) {
-    char buffer[128]; // Adjust the size as needed
+    char buffer[128];
 
     // Check if the first parameter is a number or string
     if (!(lua_type(L, 1) == LUA_TNUMBER || lua_type(L, 1) == LUA_TSTRING)) {
@@ -286,8 +286,27 @@ static const luaL_Reg estring_functions[] = {
 };
 
 static void LuaInit(lua_State* L) {
-    int top = lua_gettop(L);
     luaL_register(L, "estring", estring_functions);
+
+		// Add 6 number constants corresponding to formatType
+		lua_pushinteger(L, 1);
+		lua_setfield(L, -2, "FORMAT_12_HOUR_NO_SECONDS");
+
+		lua_pushinteger(L, 2);
+		lua_setfield(L, -2, "FORMAT_12_HOUR_LEADING_ZERO_NO_SECONDS");
+
+		lua_pushinteger(L, 3);
+		lua_setfield(L, -2, "FORMAT_12_HOUR_WITH_SECONDS");
+
+		lua_pushinteger(L, 4);
+		lua_setfield(L, -2, "FORMAT_HH_MM_SS");
+
+		lua_pushinteger(L, 5);
+		lua_setfield(L, -2, "FORMAT_HH_MM");
+
+		lua_pushinteger(L, 6);
+		lua_setfield(L, -2, "FORMAT_MM_SS");
+
     lua_pop(L, 1);
 }
 
