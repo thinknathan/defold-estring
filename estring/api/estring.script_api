@@ -1,96 +1,114 @@
 - name: estring
   type: table
-  desc: "Defold native extension with functions for string manipulation in Lua scripts."
+  desc: 'Defold native extension with functions for string manipulation in Lua scripts.'
   members:
-  - name: concat
-    type: function
-    desc: "Joins strings or numbers and returns the result."
-    returns:
-    - name: output
-      type: string
-    parameters:
-    - name: first
-      type: [number, string]
-    - name: second
-      type: [number, string]
+    - name: concat
+      type: function
+      desc: 'Joins strings or numbers and returns the result.'
+      returns:
+        - name: output
+          type: string
+      parameters:
+        - name: first
+          type: [number, string]
+        - name: second
+          type: [number, string]
 
-  - name: trim
-    type: function
-    desc: "Removes leading and trailing whitespace from a string."
-    returns:
-    - name: output
-      type: string
-    parameters:
-    - name: input
-      type: string
+    - name: trim
+      type: function
+      desc: 'Removes leading and trailing whitespace from a string.'
+      returns:
+        - name: output
+          type: string
+      parameters:
+        - name: input
+          type: string
 
-  - name: split
-    type: function
-    desc: "Splits a string into parts using a specified delimiter and returns them in a table."
-    returns:
-    - name: output
-      type: table
-    parameters:
-    - name: input
-      type: string
-    - name: delimiter
-      type: string
+    - name: split
+      type: function
+      desc: 'Splits a string into parts using a specified delimiter and returns them in a table.'
+      returns:
+        - name: output
+          type: table
+      parameters:
+        - name: input
+          type: string
+        - name: delimiter
+          type: string
 
-  - name: pad_start
-    type: function
-    desc: "Pads the start of a string with a specified padding string to reach a target length."
-    returns:
-    - name: output
-      type: string
-    parameters:
-    - name: input
-      type: string
-    - name: padding
-      type: string
-    - name: length
+    - name: pad_start
+      type: function
+      desc: 'Pads the start of a string with a specified padding string to reach a target length.'
+      returns:
+        - name: output
+          type: string
+      parameters:
+        - name: input
+          type: string
+        - name: padding
+          type: string
+        - name: length
+          type: number
+
+    - name: pad_end
+      type: function
+      desc: 'Pads the end of a string with a specified padding string to reach a target length.'
+      returns:
+        - name: output
+          type: string
+      parameters:
+        - name: input
+          type: string
+        - name: padding
+          type: string
+        - name: length
+          type: number
+
+    - name: format_number
+      type: function
+      desc: 'Formats a time value based on the provided format type, optionally using a specified delimiter.'
+      returns:
+        - name: output
+          type: string
+      parameters:
+        - name: input
+          type: [number, string]
+        - name: digit_precision
+          type: number
+        - name: thousands_separator
+          type: string
+        - name: decimal_separator
+          type: string
+
+    - name: format_time
+      type: function
+      desc: 'Formats a number as a string with options for precision, thousands separator, and decimal separator.'
+      returns:
+        - name: output
+          type: string
+      parameters:
+        - name: time_value
+          type: [number, string]
+        - name: format_type
+          desc: 1-12-hour without leading zero + without seconds, 2-12-hour with leading zero + without seconds, 3-12-hour with seconds, 4-HH:MM:SS format, 5-HH:MM format, 6-MM:SS format
+          type: number
+        - name: delimiter
+          type: string
+
+    - name: FORMAT_12H
       type: number
 
-  - name: pad_end
-    type: function
-    desc: "Pads the end of a string with a specified padding string to reach a target length."
-    returns:
-    - name: output
-      type: string
-    parameters:
-    - name: input
-      type: string
-    - name: padding
-      type: string
-    - name: length
+    - name: FORMAT_12H_LEADING_ZERO
       type: number
 
-  - name: format_number
-    type: function
-    desc: "Formats a time value based on the provided format type, optionally using a specified delimiter."
-    returns:
-    - name: output
-      type: string
-    parameters:
-    - name: input
-      type: [number, string]
-    - name: digit_precision
+    - name: FORMAT_12H_LEADING_ZERO_WITH_SECONDS
       type: number
-    - name: thousands_separator
-      type: string
-    - name: decimal_separator
-      type: string
 
-  - name: format_time
-    type: function
-    desc: "Formats a number as a string with options for precision, thousands separator, and decimal separator."
-    returns:
-    - name: output
-      type: string
-    parameters:
-    - name: time_value
-      type: [number, string]
-    - name: format_type
-      desc: 1-12-hour without leading zero + without seconds, 2-12-hour with leading zero + without seconds, 3-12-hour with seconds, 4-HH:MM:SS format, 5-HH:MM format, 6-MM:SS format
+    - name: FORMAT_HH_MM_SS
       type: number
-    - name: delimiter
-      type: string
+
+    - name: FORMAT_HH_MM
+      type: number
+
+    - name: FORMAT_MM_SS
+      type: number
