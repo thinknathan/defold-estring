@@ -55,13 +55,13 @@ local sentence = estring.concat(first, second, third) -- 'the lazy dog'
 
 ## Installation
 
-This extension includes types for use with [TypeScript + Defold](https://ts-defold.dev/).
-
 1. Edit game.project
 2. Add dependency `https://github.com/thinknathan/defold-estring/archive/main.zip` for the current version
    - Or add a specific [release](https://github.com/thinknathan/defold-estring/releases)
 
 ### TypeScript Definitions
+
+This extension includes types for use with [TypeScript + Defold](https://ts-defold.dev/).
 
 1. Install these types
 
@@ -135,13 +135,13 @@ local result_format_time = estring.format_time(os.time(), 2, "-")
 print(result_format_time) -- Output: 12-45-30 PM
 -- Parameters:
 -- timeValue: (number or string) The time value to format. It can be either a numeric timestamp or a string representing a date and time.
--- formatType: (integer) Specifies the desired format type:
--- 		1: "h:mm AM/PM"
--- 		2: "hh:mm AM/PM"
--- 		3: "hh:mm:ss AM/PM"
--- 		4: "HH:mm:ss"
--- 		5: "HH:mm"
--- 		6: "mm:ss"
+-- formatType: (constant) Specifies the desired format type:
+-- 	etable.FORMAT_12H: "h:mm AM/PM"
+-- 	etable.FORMAT_12H_LEADING_ZERO: "hh:mm AM/PM"
+-- 	etable.FORMAT_12H_LEADING_ZERO_WITH_SECONDS: "hh:mm:ss AM/PM"
+-- 	etable.FORMAT_HH_MM_SS: "HH:mm:ss"
+-- 	etable.FORMAT_HH_MM: "HH:mm"
+-- 	etable.FORMAT_MM_SS: "mm:ss"
 -- delimiter: (string, optional) The delimiter used in the formatted time. Default is ":".
 
 -- format_number

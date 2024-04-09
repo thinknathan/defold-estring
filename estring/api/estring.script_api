@@ -95,13 +95,13 @@
         - name: delimiter
           type: string
 
-    - name: FORMAT_12H_NO_SECONDS
+    - name: FORMAT_12H
       type: number
 
-    - name: FORMAT_12H_LEADING_ZERO_NO_SECONDS
+    - name: FORMAT_12H_LEADING_ZERO
       type: number
 
-    - name: FORMAT_12H_WITH_SECONDS
+    - name: FORMAT_12H_LEADING_ZERO_WITH_SECONDS
       type: number
 
     - name: FORMAT_HH_MM_SS

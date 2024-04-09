@@ -290,13 +290,13 @@ static void LuaInit(lua_State* L) {
 
 	// Add 6 number constants corresponding to formatType
 	lua_pushinteger(L, 1);
-	lua_setfield(L, -2, "FORMAT_12H_NO_SECONDS");
+	lua_setfield(L, -2, "FORMAT_12H");
 
 	lua_pushinteger(L, 2);
-	lua_setfield(L, -2, "FORMAT_12H_LEADING_ZERO_NO_SECONDS");
+	lua_setfield(L, -2, "FORMAT_12H_LEADING_ZERO");
 
 	lua_pushinteger(L, 3);
-	lua_setfield(L, -2, "FORMAT_12H_WITH_SECONDS");
+	lua_setfield(L, -2, "FORMAT_12H_LEADING_ZERO_WITH_SECONDS");
 
 	lua_pushinteger(L, 4);
 	lua_setfield(L, -2, "FORMAT_HH_MM_SS");
