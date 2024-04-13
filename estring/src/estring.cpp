@@ -3,7 +3,7 @@
 #include <ctime>
 #include <cstdio>
 
-static const char* _get_lua_arg(lua_State* L, int i) {
+static const char* get_string_arg(lua_State* L, int i) {
 	if (lua_isnumber(L, i) || lua_isstring(L, i)) {
 		return lua_tostring(L, i);
 	} else {
@@ -18,7 +18,7 @@ static int estring_concat(lua_State* L) {
 	int numArgs = lua_gettop(L);
 
 	for (int i = 1; i <= numArgs; ++i) {
-		const char* argStr = _get_lua_arg(L, i);
+		const char* argStr = get_string_arg(L, i);
 		resultLength += strlen(argStr);
 	}
 
@@ -26,7 +26,7 @@ static int estring_concat(lua_State* L) {
 	resultBuffer[0] = '\0';
 
 	for (int i = 1; i <= numArgs; ++i) {
-		const char* argStr = _get_lua_arg(L, i);
+		const char* argStr = get_string_arg(L, i);
 		strcat(resultBuffer, argStr);
 	}
 
@@ -149,14 +149,14 @@ static int estring_formatTime(lua_State* L) {
 		return luaL_error(L, "Invalid argument. Expected number or string.");
 	}
 
+	// Get the time from Lua
+	lua_Number timeValue = lua_tonumber(L, 1);
+
 	// Get format type
 	int formatType = luaL_checkinteger(L, 2);
 
 	// Get delimiter (default to colon)
 	const char* delimiter = luaL_optstring(L, 3, ":");
-
-	// Get the time from Lua
-	double timeValue = lua_tonumber(L, 1);
 
 	// Format the time based on the format type
 	struct tm* timeInfo;
